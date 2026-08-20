@@ -92,13 +92,14 @@ class HomeController extends Controller
         if($grill_banner)
             $grill_banner = $grill_banner->first();
 
-        $grill_link = json_decode(get_setting('home_banner3_links', null, $lang));
-        $sliderLinks = json_decode(get_setting('home_slider_links', null, $lang));
+        $grill_link_raw = json_decode(get_setting('home_banner3_links', null, $lang), true);
+        $grill_link = is_array($grill_link_raw) ? (reset($grill_link_raw) ?: '#') : ($grill_link_raw ?? '#');
+        $sliderLinks = json_decode(get_setting('home_slider_links', null, $lang), true);
         $brands = Brand::get();
         $partners = Partner::get();
         $sliders = get_slider_images(json_decode(get_setting('home_slider_images', null, $lang), true));
         $sliders2 = get_slider_images(json_decode(get_setting('home_banner2_images', null, $lang), true));
-        $sliderLinks2 = json_decode(get_setting('home_banner2_links', null, $lang));
+        $sliderLinks2 = json_decode(get_setting('home_banner2_links', null, $lang), true);
 
         $stainless_steel_products = Product::where('is_stainless', 1)->take(4)->get();
 

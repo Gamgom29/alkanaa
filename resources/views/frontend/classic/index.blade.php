@@ -13,7 +13,8 @@
             return str_starts_with($slider->file_original_name ?? '', $prefixLocale . '-');
         })->values();
         $sideBanner2 = $localizedSliders2->first();
-        $sideBanner2Link = $sliderLinks2[$localizedSliders2->keys()->first()] ?? '#';
+        $rawSideLink = $sliderLinks2[$localizedSliders2->keys()->first()] ?? '#';
+        $sideBanner2Link = is_array($rawSideLink) ? (reset($rawSideLink) ?: '#') : (is_string($rawSideLink) ? $rawSideLink : '#');
     @endphp
 
     @if ($localizedSliders->count() > 0)
@@ -22,8 +23,12 @@
                 <div class="lg:col-span-2 rounded-xl overflow-hidden">
                     <x-carousel :options="['loop' => $localizedSliders->count() > 1, 'autoplay' => $localizedSliders->count() > 1 ? ['delay' => 5000] : false]">
                         @foreach ($localizedSliders as $key => $slider)
+                            @php
+                                $rawSliderUrl = $sliderLinks[$key] ?? '#';
+                                $sliderUrl = is_array($rawSliderUrl) ? (reset($rawSliderUrl) ?: '#') : (is_string($rawSliderUrl) ? $rawSliderUrl : '#');
+                            @endphp
                             <div class="swiper-slide">
-                                <a href="{{ $sliderLinks[$key] ?? '#' }}" class="block">
+                                <a href="{{ $sliderUrl }}" class="block">
                                     <img src="{{ static_asset($slider->file_name) }}" class="w-full h-full object-cover rounded-xl" alt="{{ get_setting('website_name') }}"
                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                                 </a>
@@ -34,7 +39,10 @@
 
                 <div class="flex flex-col gap-4">
                     @if ($grill_banner)
-                        <a href="{{ $grill_link ?? '#' }}" class="block flex-1 rounded-xl overflow-hidden">
+                        @php
+                            $grillUrl = is_array($grill_link) ? (reset($grill_link) ?: '#') : (is_string($grill_link) ? $grill_link : '#');
+                        @endphp
+                        <a href="{{ $grillUrl }}" class="block flex-1 rounded-xl overflow-hidden">
                             <img src="{{ static_asset($grill_banner->file_name) }}" class="w-full h-full object-cover" alt="{{ get_setting('website_name') }}">
                         </a>
                     @endif
