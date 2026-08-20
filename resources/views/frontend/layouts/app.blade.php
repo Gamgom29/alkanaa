@@ -75,7 +75,7 @@
          resources/js/storefront.js). --}}
     <x-legacy-js-bridge />
 
-    @vite(['resources/css/storefront.css', 'resources/js/storefront.js'])
+    {!! render_vite_assets(['resources/css/storefront.css', 'resources/js/storefront.js']) !!}
 
     <script>
         // Translated strings for the file-upload widget (see plan Milestone 1B).

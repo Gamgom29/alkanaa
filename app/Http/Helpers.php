@@ -3128,3 +3128,53 @@ function filter_single_preorder_product($product)
     // If vendor system is not activated, return the product directly
     return $product;
 }
+
+if (!function_exists('render_vite_assets')) {
+    function render_vite_assets($entrypoints)
+    {
+        try {
+            return app(\Illuminate\Foundation\Vite::class)($entrypoints);
+        } catch (\Throwable $e) {
+            $manifestPath = public_path('build/manifest.json');
+            $html = '';
+            if (file_exists($manifestPath)) {
+                $manifest = json_decode(file_get_contents($manifestPath), true);
+                foreach ((array)$entrypoints as $entry) {
+                    if (isset($manifest[$entry]['file'])) {
+                        $file = 'build/' . $manifest[$entry]['file'];
+                        if (str_ends_with($file, '.css')) {
+                            $html .= '<link rel="stylesheet" href="' . asset($file) . '">';
+                        } elseif (str_ends_with($file, '.js')) {
+                            $html .= '<script type="module" src="' . asset($file) . '"></script>';
+                        }
+                    }
+                    if (isset($manifest[$entry]['imports'])) {
+                        foreach ($manifest[$entry]['imports'] as $importKey) {
+                            if (isset($manifest[$importKey]['file'])) {
+                                $importFile = 'build/' . $manifest[$importKey]['file'];
+                                if (str_ends_with($importFile, '.css')) {
+                                    $html .= '<link rel="stylesheet" href="' . asset($importFile) . '">';
+                                } elseif (str_ends_with($importFile, '.js')) {
+                                    $html .= '<script type="module" src="' . asset($importFile) . '"></script>';
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                $files = glob(public_path('build/assets/*'));
+                if (!empty($files)) {
+                    foreach ($files as $filePath) {
+                        $relativePath = 'build/assets/' . basename($filePath);
+                        if (str_ends_with($relativePath, '.css')) {
+                            $html .= '<link rel="stylesheet" href="' . asset($relativePath) . '">';
+                        } elseif (str_ends_with($relativePath, '.js')) {
+                            $html .= '<script type="module" src="' . asset($relativePath) . '"></script>';
+                        }
+                    }
+                }
+            }
+            return new \Illuminate\Support\HtmlString($html);
+        }
+    }
+}

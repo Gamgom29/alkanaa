@@ -32,7 +32,7 @@
 
 <x-legacy-js-bridge />
 
-@vite(['resources/css/admin.css', 'resources/js/admin.js'])
+{!! render_vite_assets(['resources/css/admin.css', 'resources/js/admin.js']) !!}
 
 <script>
     // Translated strings for the file-upload widget (see Milestone 1B).
