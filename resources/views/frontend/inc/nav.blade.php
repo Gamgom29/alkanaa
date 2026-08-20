@@ -119,12 +119,16 @@
             </div>
         </div>
 
-        <!-- Navigation Links + mega menu -->
-        <nav class="mt-2 flex justify-center">
-            <ul class="flex items-center gap-6 text-sm">
-                <li><a href="{{ route('home') }}" class="text-neutral-700 hover:text-primary">{{ translate('Home') }}</a></li>
-                <li><a href="{{ route('about.us') }}" class="text-neutral-700 hover:text-primary">{{ translate('About') }}</a></li>
-                <li
+    </div>
+
+    <!-- Category pills nav -->
+    <nav class="border-t border-neutral-200 bg-white px-6">
+        <ul class="flex items-center justify-center gap-3 py-2.5 text-sm text-neutral-600">
+            <li><a href="{{ route('home') }}" class="font-semibold text-primary">{{ translate('Home') }}</a></li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li><a href="{{ route('about.us') }}" class="hover:text-primary">{{ translate('About') }}</a></li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li
                     class="relative"
                     x-data="{
                         open: false,
@@ -187,14 +191,17 @@
                             @endforeach
                         </div>
                     </div>
-                </li>
-                <li><a href="{{ route('get-a-quote') }}" class="text-neutral-700 hover:text-primary">{{ translate('get_quote') }}</a></li>
-                <li><a href="{{ route('service-request') }}" class="text-neutral-700 hover:text-primary">{{ translate('service_request') }}</a></li>
-                <li><a href="{{ route('maintainence-request') }}" class="text-neutral-700 hover:text-primary">{{ translate('maintainence_request') }}</a></li>
-                <li><a href="{{ route('all-our-partners') }}" class="text-neutral-700 hover:text-primary">{{ translate('partners') }}</a></li>
-            </ul>
-        </nav>
-    </div>
+            </li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li><a href="{{ route('get-a-quote') }}" class="hover:text-primary">{{ translate('get_quote') }}</a></li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li><a href="{{ route('service-request') }}" class="hover:text-primary">{{ translate('service_request') }}</a></li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li><a href="{{ route('maintainence-request') }}" class="hover:text-primary">{{ translate('maintainence_request') }}</a></li>
+            <li class="text-neutral-300"><i class="fa-solid fa-chevron-left rtl:-scale-x-100 text-[10px]"></i></li>
+            <li><a href="{{ route('all-our-partners') }}" class="hover:text-primary">{{ translate('partners') }}</a></li>
+        </ul>
+    </nav>
 </header>
 
 <!-- Mobile header -->

@@ -8,9 +8,9 @@
  */
 @theme {
     /* Color palette. Primary matches the storefront's existing brand color
-       (#ae2025, used ~25x across the classic theme's CTAs/footer/headers)
-       rather than an arbitrary choice, so the new design system is
-       consistent with the brand instead of clashing with it. */
+       (#ae2025, used ~25x across the classic theme's CTAs/footer/headers).
+       The user explicitly asked to keep this — the reference homepage
+       images are for layout/card/spacing style only, not a color change. */
     --color-primary: #ae2025;
     --color-primary-dark: #8a1a1d;
     --color-secondary: #6c757d;

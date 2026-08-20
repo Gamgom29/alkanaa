@@ -313,19 +313,41 @@
 
     @include('frontend.partials.account_delete_modal')
 
-    <div class="modal fade" id="addToCart">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
-            <div class="modal-content position-relative">
-                <div class="c-preloader text-center p-3">
-                    <i class="las la-spinner la-spin la-3x"></i>
-                </div>
-                <button type="button" class="close absolute-top-right btn-icon close z-1 btn-circle bg-gray mr-2 mt-2 d-flex justify-content-center align-items-center" data-dismiss="modal" aria-label="Close" style="background: #ededf2; width: calc(2rem + 2px); height: calc(2rem + 2px);">
-                    <span aria-hidden="true" class="fs-24 fw-700" style="margin-left: 2px;">&times;</span>
-                </button>
-                <div id="addToCart-modal-body">
-
-                </div>
+    <div x-data="modal('addToCart')" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="absolute inset-0 bg-neutral-900/50"
+            x-on:click="close"
+        ></div>
+        <div
+            id="modal-size"
+            x-show="open"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-on:keydown.escape.window="close"
+            class="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-md"
+            role="dialog"
+            aria-modal="true"
+        >
+            <div class="c-preloader text-center p-6">
+                <i class="las la-spinner la-spin text-3xl text-primary"></i>
             </div>
+            <button
+                type="button"
+                class="absolute top-3 end-3 z-10 flex size-9 items-center justify-center rounded-full bg-neutral-100 text-lg font-bold text-neutral-600 hover:bg-neutral-200"
+                x-on:click="close"
+                aria-label="{{ translate('Close') }}"
+            >
+                &times;
+            </button>
+            <div id="addToCart-modal-body"></div>
         </div>
     </div>
 
@@ -363,6 +385,129 @@
         @foreach (session('flash_notification', collect())->toArray() as $message)
             AIZ.plugins.notify('{{ $message['level'] }}', '{{ $message['message'] }}');
         @endforeach
+    </script>
+
+    {{--
+        Global "Add to Cart" handler + mini-cart toast. Used to be
+        copy-pasted into ~9 separate page templates (classic/index.blade.php
+        and others) — centralized here since <x-product-card> (used
+        app-wide) relies on it via its .add-to-cart-btn/data-id markup.
+    --}}
+    <script>
+        function formatPrice(n, cur) {
+            try {
+                return new Intl.NumberFormat(document.documentElement.lang || 'sa').format(n) + (cur ? (' ' + cur) : '');
+            } catch (e) {
+                return n + (cur ? (' ' + cur) : '');
+            }
+        }
+
+        function mountMiniCartToastNearCart(html) {
+            $('.mini-cart-toast').remove();
+
+            const $toast = $(html).appendTo('body').css({
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                visibility: 'hidden'
+            });
+
+            const cartEl = document.getElementById('nav-cart-area');
+            if (!cartEl) {
+                $toast.css({
+                    position: 'fixed',
+                    visibility: 'visible',
+                    top: 80,
+                    right: 16
+                }).addClass('show');
+                return;
+            }
+
+            const rect = cartEl.getBoundingClientRect();
+            const scrollY = window.scrollY || window.pageYOffset;
+            const scrollX = window.scrollX || window.pageXOffset;
+
+            const w = $toast.outerWidth();
+            const isRTL = $toast.hasClass('rtl');
+
+            const gap = 10;
+            let top = rect.bottom + scrollY + gap;
+
+            let left;
+            if (isRTL) {
+                left = rect.left + scrollX;
+            } else {
+                left = rect.right + scrollX - w;
+            }
+
+            const minLeft = 8 + scrollX;
+            const maxLeft = scrollX + document.documentElement.clientWidth - w - 8;
+            left = Math.max(minLeft, Math.min(left, maxLeft));
+
+            $toast.css({
+                top: top,
+                left: left,
+                visibility: 'visible',
+                opacity: 0,
+                transform: 'translateY(-6px)'
+            });
+            requestAnimationFrame(() => $toast.addClass('show').css({
+                opacity: 1,
+                transform: 'translateY(0)'
+            }));
+
+            const iconCenterX = rect.left + rect.width / 2 + scrollX;
+            const toastLeft = left;
+            const toastRight = left + w;
+            let arrowOffset = isRTL ? (iconCenterX - toastLeft) : (toastRight - iconCenterX);
+            const pad = 18;
+            arrowOffset = Math.max(pad, Math.min(arrowOffset, w - pad));
+            $toast[0].style.setProperty('--arrow-offset', arrowOffset + 'px');
+
+            clearTimeout(window.__mctTimer);
+            window.__mctTimer = setTimeout(() => {
+                $toast.find('.mct-close').trigger('click');
+            }, 2500);
+
+            const targetY = Math.max(0, top - 120);
+            window.scrollTo({
+                top: targetY,
+                behavior: 'smooth'
+            });
+        }
+
+        $(document).on('click', '.mct-close', function () {
+            $(this).closest('.mini-cart-toast').remove();
+        });
+
+        $(document).on('click', '.add-to-cart-btn', function (e) {
+            e.preventDefault();
+            const $btn = $(this);
+            const id = $btn.data('id');
+
+            const originalHtml = $btn.html();
+            $btn.addClass('is-loading').prop('disabled', true)
+                .html('<span class="btn-spinner" aria-hidden="true"></span>');
+
+            $.post('{{ route('cart.addToCart') }}', {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                quantity: 1
+            }).done(function (res) {
+                if (typeof res.cart_count !== 'undefined') {
+                    $('.cart-count-span').text(res.cart_count);
+                }
+                if (res.modal_view) {
+                    mountMiniCartToastNearCart(res.modal_view);
+                } else if (res.status != 1) {
+                    window.notify('warning', res.message || "{{ translate('Something went wrong') }}");
+                }
+            }).fail(function () {
+                window.notify('danger', "{{ translate('Something went wrong') }}");
+            }).always(function () {
+                $btn.removeClass('is-loading').prop('disabled', false).html(originalHtml);
+            });
+        });
     </script>
 
     <script>

@@ -1,7 +1,6 @@
-.env
+
 /bootstrap/compiled.php
-.env.*.php
-.env.php
+
 
 /node_modules
 /public/assets
@@ -32,6 +31,5 @@ install.zip
 /nbproject
 /public/app-translations
 public/uploads.zip
-.env
 public/all
 

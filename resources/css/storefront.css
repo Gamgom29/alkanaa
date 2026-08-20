@@ -5,3 +5,138 @@
 body {
     @apply bg-neutral-50 text-neutral-900 font-sans text-base leading-normal;
 }
+
+/*
+ * "Mini cart toast" — the small popup shown near the cart icon after a
+ * successful add-to-cart (see the global .add-to-cart-btn handler and
+ * mountMiniCartToastNearCart() in frontend/layouts/app.blade.php, and the
+ * mct-* markup it renders via CartController::addToCart's modal_view).
+ * Moved here from being duplicated inline in ~9 page templates.
+ */
+.mini-cart-toast {
+    position: absolute;
+    z-index: 1050;
+    width: min(420px, 92vw);
+    background: #fff;
+    border: 1px solid theme(colors.neutral.200);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.12);
+    padding: 14px;
+}
+
+.mct-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: theme(colors.success);
+}
+
+.mct-close {
+    margin-inline-start: auto;
+    border: 0;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.mct-body {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.mct-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid theme(colors.neutral.100);
+}
+
+.mct-title {
+    font-weight: 600;
+    margin: 0 0 4px;
+    font-size: 15px;
+}
+
+.mct-meta {
+    font-size: 13px;
+    color: theme(colors.neutral.500);
+}
+
+.mct-cart-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.mct-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.mct-btn {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid theme(colors.neutral.200);
+    background: theme(colors.neutral.50);
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+}
+
+.mct-btn.primary {
+    background: theme(colors.neutral.900);
+    color: #fff;
+    border-color: theme(colors.neutral.900);
+}
+
+.mini-cart-toast::before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border: 1px solid theme(colors.neutral.200);
+    border-bottom: none;
+    border-left: none;
+    transform: rotate(45deg);
+    top: -7px;
+    box-shadow: 0 6px 15px rgb(0 0 0 / 0.06);
+}
+
+.mini-cart-toast.ltr::before {
+    right: var(--arrow-offset, 24px);
+}
+
+.mini-cart-toast.rtl::before {
+    left: var(--arrow-offset, 24px);
+}
+
+.add-to-cart-btn.is-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.add-to-cart-btn .btn-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+    vertical-align: -2px;
+    margin-inline-end: 6px;
+}
+
+@keyframes btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
