@@ -1732,9 +1732,16 @@ if (!function_exists('get_admin')) {
 if (!function_exists('get_slider_images')) {
     function get_slider_images($ids)
     {
+        if (empty($ids) || !is_array($ids)) {
+            return collect();
+        }
+        $validIds = array_filter($ids);
+        if (empty($validIds)) {
+            return collect();
+        }
         $slider_query = Upload::query();
-        $sliders = $slider_query->whereIn('id', $ids);
-        foreach ($ids as $id) {
+        $sliders = $slider_query->whereIn('id', $validIds);
+        foreach ($validIds as $id) {
             $sliders->orderByRaw("id!=?", [$id]);
         }
         return $sliders->get();

@@ -20,12 +20,14 @@ class AppServiceProvider extends ServiceProvider
       Schema::defaultStringLength(191);
       Paginator::useBootstrap();
       View::composer('*', function ($view) {
-        $categories = \Cache::rememberForever('header_categories', function () {
-            return Category::all();
-        });
-
-        $view->with('categories', $categories);
-    });
+          static $categories = null;
+          if ($categories === null) {
+              $categories = \Cache::rememberForever('header_categories', function () {
+                  return Category::all();
+              });
+          }
+          $view->with('categories', $categories);
+      });
   }
 
   /**
