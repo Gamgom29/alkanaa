@@ -7,6 +7,36 @@ use Cookie;
 
 class CartUtility
 {
+    /**
+     * Query builder scoped to the current user's (or guest's) cart rows.
+     * Centralizes logic that used to be duplicated inline across
+     * resources/views/frontend/inc/nav.blade.php and the two cart summary
+     * partials, so callers just chain ->count()/->get() as needed instead of
+     * re-deriving the user/guest scoping themselves.
+     *
+     * @param bool $bootstrapGuestId When true, creates a temp_user_id
+     *   session + long-lived cookie for a guest who doesn't have one yet
+     *   (used by views that need to persist a guest's cart). When false
+     *   (default), a guest without an existing temp_user_id simply gets an
+     *   empty result — safe for read-only chrome like a nav cart badge that
+     *   shouldn't start tracking a guest just because they viewed a page.
+     */
+    public static function current_user_cart_query($bootstrapGuestId = false)
+    {
+        if (auth()->check()) {
+            return Cart::where('user_id', auth()->id());
+        }
+
+        $tempUserId = session()->get('temp_user_id');
+
+        if (!$tempUserId && $bootstrapGuestId) {
+            $tempUserId = Cookie::get('temp_user_id') ?? \Illuminate\Support\Str::random(15);
+            session()->put('temp_user_id', $tempUserId);
+            Cookie::queue('temp_user_id', $tempUserId, 60 * 24 * 30);
+        }
+
+        return $tempUserId ? Cart::where('temp_user_id', $tempUserId) : Cart::whereRaw('1 = 0');
+    }
 
     public static function create_cart_variant($product, $request)
     {

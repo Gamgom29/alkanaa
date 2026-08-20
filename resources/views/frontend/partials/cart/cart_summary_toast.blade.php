@@ -592,24 +592,10 @@
 </style>
 
 @php
-    use Illuminate\Support\Str;
-    use Illuminate\Support\Facades\Cookie;
-
-    if (!session()->get('temp_user_id')) {
-        $temp_id = Cookie::get('temp_user_id') ?? Str::random(15);
-        session()->put('temp_user_id', $temp_id);
-        Cookie::queue('temp_user_id', $temp_id, 60 * 24 * 30); // يحفظه لمدة شهر
-    }
-
-    $user = auth()->user();
-    $temp_user = session()->get('temp_user_id');
-
-    // جلب السلة للمستخدم أو الزائر المؤقت
-    $carts = auth()->check()
-        ? \App\Models\Cart::where('user_id', auth()->id())
-        : \App\Models\Cart::where('temp_user_id', $temp_user);
-
-    $carts = $carts->latest()->get();
+    // Reuse the cart passed in by the controller when there is one;
+    // otherwise resolve it here so this partial still works when
+    // @include'd directly.
+    $carts = $carts ?? \App\Utility\CartUtility::current_user_cart_query(true)->latest()->get();
 
     // تهيئة المتغيرات
     $subtotal_for_min_order_amount = 0;

@@ -35,7 +35,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin', 'prevent-bac
     });
 });
 
-Route::group(['middleware' => ['user', 'verified', 'unbanned', 'prevent-back-history']], function() {
+Route::group(['middleware' => ['delivery_boy', 'verified', 'unbanned', 'prevent-back-history']], function() {
     Route::controller(DeliveryBoyController::class)->group(function () {
         Route::get('/assigned-deliveries', 'assigned_delivery')->name('assigned-deliveries');
         Route::get('/pickup-deliveries', 'pickup_delivery')->name('pickup-deliveries');

@@ -64,19 +64,13 @@
         </div>
 
         <div class="card-body">
+            <x-table-wrapper>
             <table class="table aiz-table mb-0">
                 <thead>
                 <tr>
                     <th>
                         @if(auth()->user()->can('delete_seller') && ($route == 'all_seller_route'))
-                            <div class="form-group">
-                                <div class="aiz-checkbox-inline">
-                                    <label class="aiz-checkbox">
-                                        <input type="checkbox" class="check-all">
-                                        <span class="aiz-square-check"></span>
-                                    </label>
-                                </div>
-                            </div>
+                            <x-checkbox class="check-all" />
                         @else
                             #
                         @endif
@@ -107,14 +101,7 @@
                     <tr>
                         <td>
                             @if(auth()->user()->can('delete_seller') && ($route == 'all_seller_route'))
-                                <div class="form-group">
-                                    <div class="aiz-checkbox-inline">
-                                        <label class="aiz-checkbox">
-                                            <input type="checkbox" class="check-one" name="id[]" value="{{$shop->id}}">
-                                            <span class="aiz-square-check"></span>
-                                        </label>
-                                    </div>
-                                </div>
+                                <x-checkbox class="check-one" name="id[]" value="{{ $shop->id }}" />
                             @else
                                 {{ ($key+1) + ($shops->currentPage() - 1)*$shops->perPage() }}
                             @endif
@@ -163,16 +150,16 @@
                             @endif
                             <td>
                                 @if($shop->user->email_verified_at != null)
-                                    <span class="badge badge-inline badge-success">{{translate('Verified')}}</span>
+                                    <x-status-badge status="Verified" tone="success" />
                                 @else
-                                    <span class="badge badge-inline badge-warning">{{translate('Unverified')}}</span>
+                                    <x-status-badge status="Unverified" tone="warning" />
                                 @endif
                             </td>
                             <td>
                                 @if($shop->user->banned)
-                                    <span class="badge badge-inline badge-danger">{{ translate('Ban') }}</span>
+                                    <x-status-badge status="Ban" tone="danger" />
                                 @else
-                                    <span class="badge badge-inline badge-success">{{ translate('Regular') }}</span>
+                                    <x-status-badge status="Regular" tone="success" />
                                 @endif
                             </td>
                             <td>
@@ -254,6 +241,7 @@
                 @endforeach
                 </tbody>
             </table>
+            </x-table-wrapper>
             <div class="aiz-pagination">
               {{ $shops->appends(request()->input())->links() }}
             </div>

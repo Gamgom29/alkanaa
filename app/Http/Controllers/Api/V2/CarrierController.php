@@ -34,10 +34,12 @@ class CarrierController extends Controller
         if (count($carts) > 0) {
             $zone = $shipping_info['country_id'] ? Country::where('id', $shipping_info['country_id'])->first()->zone_id : null;
             $carrier_query = Carrier::query();
-            $carrier_query->whereIn('id',function ($query) use ($zone) {
-                $query->select('carrier_id')->from('carrier_range_prices')
-                ->where('zone_id', $zone);
-            })->orWhere('free_shipping', 1);
+            $carrier_query->where(function ($query) use ($zone) {
+                $query->whereIn('id', function ($query) use ($zone) {
+                    $query->select('carrier_id')->from('carrier_range_prices')
+                        ->where('zone_id', $zone);
+                })->orWhere('free_shipping', 1);
+            });
             $carriers_list = $carrier_query->active()->get();
             foreach($carts->unique('owner_id') as $cart) {
                 $new_carrier_list = [];

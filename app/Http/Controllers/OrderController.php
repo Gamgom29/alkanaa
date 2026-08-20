@@ -21,7 +21,6 @@ use App\Models\OrdersExport;
 use App\Utility\NotificationUtility;
 use CoreComponentRepository;
 use App\Utility\SmsUtility;
-use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OrderNotification;
@@ -33,64 +32,28 @@ class OrderController extends Controller
     public function __construct()
     {
         // Staff Permission Check
-        $this->middleware(['permission:view_all_orders|view_inhouse_orders|view_seller_orders|view_pickup_point_orders|view_all_offline_payment_orders'])->only('all_orders');
+        $this->middleware(['permission:view_all_orders|view_inhouse_orders|view_seller_orders|view_pickup_point_orders|view_all_offline_payment_orders|view_all_unpaid_orders'])
+            ->only(['all_orders', 'inhouse_orders', 'seller_orders', 'pick_up_point_orders', 'offline_payment_orders', 'unpaid_orders']);
         $this->middleware(['permission:view_order_details'])->only('show');
         $this->middleware(['permission:delete_order'])->only('destroy','bulk_order_delete');
     }
 
-    // All Orders
-    public function all_orders(Request $request)
+    /**
+     * Shared tail for the order-list actions below: applies the request's
+     * search/payment/delivery/date filters on top of the scope each action
+     * already applied, then paginates and renders. Each action owns its own
+     * scope + permission check so scoping is no longer inferred from
+     * Route::currentRouteName() — a renamed/duplicated route can no longer
+     * silently fall through to the wrong scope (or a 403) the way it could
+     * when every named route pointed at one method that guessed its scope
+     * from the route name string.
+     */
+    private function renderOrdersIndex(Request $request, $orders, $order_type = '')
     {
-        CoreComponentRepository::instantiateShopRepository();
-
         $date = $request->date;
         $sort_search = null;
         $delivery_status = null;
         $payment_status = '';
-        $order_type = '';
-
-        $orders = Order::orderBy('id', 'desc');
-        $admin_user_id = get_admin()->id;
-
-        if (Route::currentRouteName() == 'inhouse_orders.index' && Auth::user()->can('view_inhouse_orders')) {
-            $orders = $orders->where('orders.seller_id', '=', $admin_user_id);
-        }
-        elseif (Route::currentRouteName() == 'seller_orders.index' && Auth::user()->can('view_seller_orders')) {
-            $orders = $orders->where('orders.seller_id', '!=', $admin_user_id);
-        }
-        elseif (Route::currentRouteName() == 'pick_up_point.index' && Auth::user()->can('view_pickup_point_orders')) {
-            if (get_setting('vendor_system_activation') != 1) {
-                $orders = $orders->where('orders.seller_id', '=', $admin_user_id);
-            }
-            $orders->where('shipping_type', 'pickup_point')->orderBy('code', 'desc');
-            if (
-                Auth::user()->user_type == 'staff' &&
-                Auth::user()->staff->pick_up_point != null
-            ) {
-                $orders->where('shipping_type', 'pickup_point')
-                    ->where('pickup_point_id', Auth::user()->staff->pick_up_point->id);
-            }
-        }
-        elseif (Route::currentRouteName() == 'all_orders.index' && Auth::user()->can('view_all_orders')) {
-            if (get_setting('vendor_system_activation') != 1) {
-                $orders = $orders->where('orders.seller_id', '=', $admin_user_id);
-            }
-        }
-        elseif (Route::currentRouteName() == 'offline_payment_orders.index' && Auth::user()->can('view_all_offline_payment_orders')) {
-            $orders = $orders->where('orders.manual_payment', 1);
-            if($request->order_type != null){
-                $order_type = $request->order_type;
-                $orders = $order_type =='inhouse_orders' ? 
-                            $orders->where('orders.seller_id', '=', $admin_user_id) : 
-                            $orders->where('orders.seller_id', '!=', $admin_user_id);
-            }
-        }
-        elseif (Route::currentRouteName() == 'unpaid_orders.index' && Auth::user()->can('view_all_unpaid_orders')) {
-            $orders = $orders->where('orders.payment_status', 'unpaid');
-        }
-        else {
-            abort(403);
-        }
 
         if ($request->search) {
             $sort_search = $request->search;
@@ -111,6 +74,107 @@ class OrderController extends Controller
         $orders = $orders->paginate(15);
         $unpaid_order_payment_notification = get_notification_type('complete_unpaid_order_payment', 'type');
         return view('backend.sales.index', compact('orders', 'sort_search', 'order_type', 'payment_status', 'delivery_status', 'date', 'unpaid_order_payment_notification'));
+    }
+
+    // All Orders
+    public function all_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_all_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $orders = Order::orderBy('id', 'desc');
+        if (get_setting('vendor_system_activation') != 1) {
+            $orders = $orders->where('orders.seller_id', '=', get_admin()->id);
+        }
+
+        return $this->renderOrdersIndex($request, $orders);
+    }
+
+    // In-house Orders
+    public function inhouse_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_inhouse_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $orders = Order::orderBy('id', 'desc')->where('orders.seller_id', '=', get_admin()->id);
+
+        return $this->renderOrdersIndex($request, $orders);
+    }
+
+    // Seller Orders
+    public function seller_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_seller_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $orders = Order::orderBy('id', 'desc')->where('orders.seller_id', '!=', get_admin()->id);
+
+        return $this->renderOrdersIndex($request, $orders);
+    }
+
+    // Orders by Pickup Point
+    public function pick_up_point_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_pickup_point_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $admin_user_id = get_admin()->id;
+        $orders = Order::orderBy('id', 'desc');
+        if (get_setting('vendor_system_activation') != 1) {
+            $orders = $orders->where('orders.seller_id', '=', $admin_user_id);
+        }
+        $orders->where('shipping_type', 'pickup_point')->orderBy('code', 'desc');
+        if (
+            Auth::user()->user_type == 'staff' &&
+            Auth::user()->staff->pick_up_point != null
+        ) {
+            $orders->where('shipping_type', 'pickup_point')
+                ->where('pickup_point_id', Auth::user()->staff->pick_up_point->id);
+        }
+
+        return $this->renderOrdersIndex($request, $orders);
+    }
+
+    // Offline Payment Orders
+    public function offline_payment_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_all_offline_payment_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $admin_user_id = get_admin()->id;
+        $orders = Order::orderBy('id', 'desc')->where('orders.manual_payment', 1);
+        $order_type = '';
+        if ($request->order_type != null) {
+            $order_type = $request->order_type;
+            $orders = $order_type == 'inhouse_orders'
+                ? $orders->where('orders.seller_id', '=', $admin_user_id)
+                : $orders->where('orders.seller_id', '!=', $admin_user_id);
+        }
+
+        return $this->renderOrdersIndex($request, $orders, $order_type);
+    }
+
+    // Unpaid Orders
+    public function unpaid_orders(Request $request)
+    {
+        if (!Auth::user()->can('view_all_unpaid_orders')) {
+            abort(403);
+        }
+        CoreComponentRepository::instantiateShopRepository();
+
+        $orders = Order::orderBy('id', 'desc')->where('orders.payment_status', 'unpaid');
+
+        return $this->renderOrdersIndex($request, $orders);
     }
 
     public function show($id)

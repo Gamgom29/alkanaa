@@ -57,22 +57,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function index()
-    // {
-    //     // $route = route(get_setting('customer_registration_verify') === '1' ? 'registration.verification' : 'user.registration'); 
-    //     // dd( $route );
-    //     $lang = get_system_language() ? get_system_language()->code : null;
-    //     $featured_categories = Cache::rememberForever('featured_categories', function () {
-    //         return Category::with('bannerImage')->where('featured', 1)->get();
-    //     });
-
-
-    //     return view('frontend.' . get_setting('homepage_select') . '.index', compact('featured_categories', 'lang'));
-    // }
-
     public function index()
     {
-        Artisan::call('cache:clear');
         $lang = get_system_language() ? get_system_language()->code : null;
 
         $main_categories = Category::with('bannerImage')
@@ -117,7 +103,7 @@ class HomeController extends Controller
         $stainless_steel_products = Product::where('is_stainless', 1)->take(4)->get();
 
         return view(
-            'frontend.' . get_setting('homepage_select') . '.index',
+            'frontend.' . homepage_theme() . '.index',
             compact(
                 'main_categories',
                 'summer_banners',
@@ -343,12 +329,12 @@ class HomeController extends Controller
 
     public function about_us()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.about_us');
+        return view('frontend.' . homepage_theme() . '.about_us');
     }
 
     public function contact_us()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.contact');
+        return view('frontend.' . homepage_theme() . '.contact');
     }
     public function sendContact(Request $request)
     {
@@ -386,7 +372,7 @@ class HomeController extends Controller
     public function load_todays_deal_section()
     {
         $todays_deal_products = filter_products(Product::where('todays_deal', '1'))->orderBy('id', 'desc')->get();
-        return view('frontend.' . get_setting('homepage_select') . '.partials.todays_deal', compact('todays_deal_products'));
+        return view('frontend.' . homepage_theme() . '.partials.todays_deal', compact('todays_deal_products'));
     }
 
     public function load_newest_product_section()
@@ -395,17 +381,17 @@ class HomeController extends Controller
             return filter_products(Product::latest())->limit(12)->get();
         });
 
-        return view('frontend.' . get_setting('homepage_select') . '.partials.newest_products_section', compact('newest_products'));
+        return view('frontend.' . homepage_theme() . '.partials.newest_products_section', compact('newest_products'));
     }
 
     public function load_featured_section()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.partials.featured_products_section');
+        return view('frontend.' . homepage_theme() . '.partials.featured_products_section');
     }
 
     public function load_best_selling_section()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.partials.best_selling_section');
+        return view('frontend.' . homepage_theme() . '.partials.best_selling_section');
     }
 
     public function load_auction_products_section()
@@ -414,17 +400,17 @@ class HomeController extends Controller
             return;
         }
         $lang = get_system_language() ? get_system_language()->code : null;
-        return view('auction.frontend.' . get_setting('homepage_select') . '.auction_products_section', compact('lang'));
+        return view('auction.frontend.' . homepage_theme() . '.auction_products_section', compact('lang'));
     }
 
     public function load_home_categories_section()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.partials.home_categories_section');
+        return view('frontend.' . homepage_theme() . '.partials.home_categories_section');
     }
 
     public function load_best_sellers_section()
     {
-        return view('frontend.' . get_setting('homepage_select') . '.partials.best_sellers_section');
+        return view('frontend.' . homepage_theme() . '.partials.best_sellers_section');
     }
     public function load_preorder_featured_products_section()
     {
@@ -442,7 +428,7 @@ class HomeController extends Controller
             ->limit(12)
             ->get();
         // });
-        return view('frontend.' . get_setting('homepage_select') . '.partials.preorder_products_section', compact('preorder_products'));
+        return view('frontend.' . homepage_theme() . '.partials.preorder_products_section', compact('preorder_products'));
     }
 
     public function login()

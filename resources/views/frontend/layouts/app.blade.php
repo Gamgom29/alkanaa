@@ -64,23 +64,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
         rel="stylesheet">
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-    {{-- @if ($rtl == 1)
-        <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
-    @endif --}}
-    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000, 9999) }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
-    <script src="https://kit.fontawesome.com/cbcafb1e3c.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/front_css/index.css') }}">
 
-    
+    <script src="https://kit.fontawesome.com/cbcafb1e3c.js" crossorigin="anonymous"></script>
+
+    {{-- The old proprietary AIZ theme (vendors.css/aiz-core.css/js, front_css/*)
+         is no longer loaded — the storefront runs on the same Tailwind +
+         Alpine.js stack as the rest of the app (see resources/css/storefront.css,
+         resources/js/storefront.js). --}}
+    <x-legacy-js-bridge />
+
+    @vite(['resources/css/storefront.css', 'resources/js/storefront.js'])
+
     <script>
-        var AIZ = AIZ || {};
-        AIZ.local = {
+        // Translated strings for the file-upload widget (see plan Milestone 1B).
+        window.appStrings = {
             nothing_selected: '{!! translate('Nothing selected', null, true) !!}',
             nothing_found: '{!! translate('Nothing found', null, true) !!}',
             choose_file: '{{ translate('Choose file') }}',
@@ -101,10 +100,10 @@
             complete: '{{ translate('Complete') }}',
             file: '{{ translate('File') }}',
             files: '{{ translate('Files') }}',
-        }
+        };
     </script>
 
-    
+
 {{-- <style>
     .fixed-nav + * {
     padding-top: 0;
@@ -168,7 +167,8 @@
 
 </head>
 <body>
-    
+    <x-toast-container />
+
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column bg-white">
         @php
@@ -329,10 +329,6 @@
     </div>
 
     @yield('modal')
-
-    <!-- SCRIPTS -->
-    <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
-    <script src="{{ static_asset('assets/js/aiz-core.js?v=') }}{{ rand(1000, 9999) }}"></script>
 
     {{-- WhatsaApp Chat --}}
     @if (get_setting('whatsapp_chat') == 1)
@@ -954,14 +950,17 @@ input.addEventListener("countrychange", function(e) {
     @php
 echo get_setting('footer_script'); @endphp
 
-   <!-- script tags -->
-    <script src="{{ static_asset('assets/front_js/bootstrap.js') }}"></script>
-    <script src="{{ static_asset('assets/front_js/index.js') }}"></script>
+    {{--
+        front_js/bootstrap.js, front_js/index.js (site-specific customizations
+        on top of the AIZ theme) and the Bootstrap 5 CDN bundle are removed as
+        part of the framework switch. front_js/index.js in particular isn't in
+        this repository (deployed separately, gitignored) and couldn't be
+        inspected before removal — if the storefront relied on custom
+        behavior from that file beyond what's already inline in this layout,
+        it will need to be identified from the live site and rebuilt; there
+        was no way to recover its contents here.
+    --}}
 
-<!-- Popper & Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-@yield('script')
+    @yield('script')
 </body>
 </html>

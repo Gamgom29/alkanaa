@@ -28,11 +28,13 @@ class NoteController extends Controller
     public function index(Request $request)
     {
         $sort_search =null;
-        $notes =  Note::where('user_id', auth()->id())
-                        ->orWhere(function ($query){
-                            $query->where('user_id', get_admin()->id)
-                            ->where('seller_access', 1);
-                        });
+        $notes = Note::where(function ($query) {
+                        $query->where('user_id', auth()->id())
+                            ->orWhere(function ($query) {
+                                $query->where('user_id', get_admin()->id)
+                                    ->where('seller_access', 1);
+                            });
+                    });
         if ($request->has('search')){
             $sort_search = $request->search;
             $notes = $notes->where('description', 'like', '%'.$sort_search.'%');

@@ -214,6 +214,19 @@ if (!function_exists('convert_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
+        $currency_code = Session::get('currency_code')
+            ?: request()->header('Currency-Code')
+            ?: get_system_default_currency()->code;
+
+        // Saudi Riyal: render the official symbol (Unicode 17, U+20C1) instead
+        // of the plain-text symbol stored in the currencies table. The glyph
+        // itself comes from the "saudi_riyal" webfont in the --font-sans
+        // fallback stack (see resources/css/fonts.css), so it renders correctly
+        // wherever this string ends up, without any markup changes.
+        if (strtoupper((string) $currency_code) === 'SAR') {
+            return "\u{20C1}";
+        }
+
         if (Session::has('currency_symbol')) {
             return Session::get('currency_symbol');
         }
@@ -1300,6 +1313,25 @@ if (!function_exists('static_asset')) {
     }
 }
 
+if (!function_exists('static_asset_version')) {
+    /**
+     * A cache-busting query value for a static asset. Uses the file's actual
+     * modification time when the file exists on disk, so the browser cache
+     * only invalidates when the asset content changes (unlike rand(), which
+     * changed the URL — and forced a re-download — on every single request).
+     * Falls back to the app version when the file isn't reachable locally.
+     *
+     * @param string $relativePath Path under public/, e.g. 'assets/css/aiz-core.css'
+     * @return string
+     */
+    function static_asset_version($relativePath)
+    {
+        $fullPath = public_path($relativePath);
+
+        return file_exists($fullPath) ? (string) filemtime($fullPath) : (string) get_setting('current_version', '1');
+    }
+}
+
 
 // if (!function_exists('isHttps')) {
 //     function isHttps()
@@ -1365,6 +1397,20 @@ if (!function_exists('get_setting')) {
             $setting = !$setting ? $settings->where('type', $key)->first() : $setting;
         }
         return $setting == null ? $default : $setting->value;
+    }
+}
+
+if (!function_exists('homepage_theme')) {
+    /**
+     * Resolves the active homepage theme folder name, guarding against an
+     * empty/invalid `homepage_select` setting resolving to a non-existent view.
+     */
+    function homepage_theme()
+    {
+        $themes = ['classic', 'megamart', 'metro', 'minima', 'reclassic'];
+        $selected = get_setting('homepage_select');
+
+        return in_array($selected, $themes) ? $selected : 'classic';
     }
 }
 

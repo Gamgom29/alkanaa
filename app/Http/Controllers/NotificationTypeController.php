@@ -43,10 +43,12 @@ class NotificationTypeController extends Controller
         });
 
         if ($notification_type_sort_search != null){
-            $notificationTypes = $notificationTypes->where('name', 'like', '%' . $notification_type_sort_search . '%')
-                ->orWhereHas('notificationTypeTranslations', function ($q) use ($notification_type_sort_search) {
-                    $q->where('name', 'like', '%' . $notification_type_sort_search . '%');
-                });
+            $notificationTypes = $notificationTypes->where(function ($q) use ($notification_type_sort_search) {
+                $q->where('name', 'like', '%' . $notification_type_sort_search . '%')
+                    ->orWhereHas('notificationTypeTranslations', function ($q2) use ($notification_type_sort_search) {
+                        $q2->where('name', 'like', '%' . $notification_type_sort_search . '%');
+                    });
+            });
         }
         $notificationTypes = $notificationTypes->orderByRaw("FIELD(type , 'custom') ASC")->paginate(10);
         return view('backend.notification.notification_types.index', compact('notificationTypes', 'notification_type_sort_search', 'notificationUserType'));

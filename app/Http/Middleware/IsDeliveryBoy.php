@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
-class UserMiddleware
+class IsDeliveryBoy
 {
     /**
      * Handle an incoming request.
@@ -15,12 +16,11 @@ class UserMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && (isClient() || isFreelancer()) && !Auth::user()->banned) {
+        if (Auth::check() && Auth::user()->user_type == 'delivery_boy' && !Auth::user()->banned) {
             return $next($request);
         }
         else{
-            session(['link' => url()->current()]);
-            return redirect()->route('user.login');
+            abort(404);
         }
     }
 }

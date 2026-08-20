@@ -1,0 +1,19 @@
+/*
+ * "saudi_riyal" — the official Saudi Riyal currency symbol (Unicode 17,
+ * codepoint U+20C1), released by SAMA (Saudi Central Bank) in Feb 2025.
+ * Font source: emran-alhaddad/Saudi-Riyal-Font (SIL OFL 1.1 — see
+ * public/fonts/saudi-riyal/LICENSE.txt for the full license text).
+ *
+ * It's added to the --font-sans fallback stack in theme.css rather than
+ * applied via a class, so any U+20C1 character already present in normal
+ * body text (see currency_symbol() in app/Http/Helpers.php) automatically
+ * renders as the icon glyph — no markup changes needed at price call sites.
+ */
+@font-face {
+    font-family: "saudi_riyal";
+    src: url("/fonts/saudi-riyal/saudi_riyal.woff2") format("woff2"),
+         url("/fonts/saudi-riyal/saudi_riyal.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

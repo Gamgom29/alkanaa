@@ -91,10 +91,12 @@ class CheckoutController extends Controller
                 $zone = $country_id != 0 ? Country::where('id', $country_id)->where('status', 1)->first()->zone_id ?? 0 : 0;
 
                 $carrier_query = Carrier::where('status', 1);
-                $carrier_query->whereIn('id', function ($query) use ($zone) {
-                    $query->select('carrier_id')->from('carrier_range_prices')
-                        ->where('zone_id', $zone);
-                })->orWhere('free_shipping', 1);
+                $carrier_query->where(function ($query) use ($zone) {
+                    $query->whereIn('id', function ($query) use ($zone) {
+                        $query->select('carrier_id')->from('carrier_range_prices')
+                            ->where('zone_id', $zone);
+                    })->orWhere('free_shipping', 1);
+                });
                 $carrier_list = $carrier_query->get();
 
                 if (count($carrier_list) > 0) {
@@ -486,10 +488,12 @@ class CheckoutController extends Controller
             $zone = Country::where('id', $country_id)->first()->zone_id;
 
             $carrier_query = Carrier::where('status', 1);
-            $carrier_query->whereIn('id', function ($query) use ($zone) {
-                $query->select('carrier_id')->from('carrier_range_prices')
-                    ->where('zone_id', $zone);
-            })->orWhere('free_shipping', 1);
+            $carrier_query->where(function ($query) use ($zone) {
+                $query->whereIn('id', function ($query) use ($zone) {
+                    $query->select('carrier_id')->from('carrier_range_prices')
+                        ->where('zone_id', $zone);
+                })->orWhere('free_shipping', 1);
+            });
             $carrier_list = $carrier_query->get();
         }
 
@@ -767,10 +771,12 @@ class CheckoutController extends Controller
             $zone = $country_id != 0 ? Country::where('id', $country_id)->where('status', 1)->first()?->zone_id ?? 0 : 0;
 
             $carrier_query = Carrier::where('status', 1);
-            $carrier_query->whereIn('id', function ($query) use ($zone) {
-                $query->select('carrier_id')->from('carrier_range_prices')
-                    ->where('zone_id', $zone);
-            })->orWhere('free_shipping', 1);
+            $carrier_query->where(function ($query) use ($zone) {
+                $query->whereIn('id', function ($query) use ($zone) {
+                    $query->select('carrier_id')->from('carrier_range_prices')
+                        ->where('zone_id', $zone);
+                })->orWhere('free_shipping', 1);
+            });
             $carrier_list = $carrier_query->get();
 
             if (count($carrier_list) > 1) {

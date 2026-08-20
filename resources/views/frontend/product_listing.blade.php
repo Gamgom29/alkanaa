@@ -563,11 +563,8 @@
                                 </li>
                             @endif
                             <li class="text-dark fw-600 breadcrumb-item">
-                                @if (isset($category_id))
-                                    @php
-                                        $categoryForName = \App\Models\Category::find($category_id);
-                                    @endphp
-                                    "{{ $categoryForName->getTranslation('name') }}"
+                                @if (isset($category_id) && $category)
+                                    "{{ $category->getTranslation('name') }}"
                                 @endif
                             </li>
                         </ul>
@@ -576,9 +573,9 @@
                         <div>
                             <div class="row gutters-5 flex-wrap align-items-center">
                                 <div class="col-lg col-10">
-                                    @if (isset($category_id))
+                                    @if (isset($category_id) && $category)
                                         <h1 class="fs-20 fs-md-24 fw-700 text-dark">
-                                            {{ $categoryForName->getTranslation('name') }}
+                                            {{ $category->getTranslation('name') }}
                                         </h1>
                                     @endif
                                     <input type="hidden" name="keyword" value="{{ $query }}">
@@ -622,7 +619,7 @@
                                     @else
                                         @include(
                                             'frontend.' .
-                                                get_setting('homepage_select') .
+                                                homepage_theme() .
                                                 '.partials.product_box_1',
                                             ['product' => $product]
                                         )

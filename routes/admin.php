@@ -399,10 +399,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', 'prevent-ba
     Route::controller(OrderController::class)->group(function () {
         // All Orders
         Route::get('/all_orders', 'all_orders')->name('all_orders.index');
-        Route::get('/inhouse-orders', 'all_orders')->name('inhouse_orders.index');
-        Route::get('/seller_orders', 'all_orders')->name('seller_orders.index');
-        Route::get('/orders_by_pickup_point', 'all_orders')->name('pick_up_point.index');
-        Route::get('/unpaid_orders', 'all_orders')->name('unpaid_orders.index');
+        Route::get('/inhouse-orders', 'inhouse_orders')->name('inhouse_orders.index');
+        Route::get('/seller_orders', 'seller_orders')->name('seller_orders.index');
+        Route::get('/orders_by_pickup_point', 'pick_up_point_orders')->name('pick_up_point.index');
+        Route::get('/unpaid_orders', 'unpaid_orders')->name('unpaid_orders.index');
 
         Route::get('/orders/{id}/show', 'show')->name('all_orders.show');
         Route::get('/inhouse-orders/{id}/show', 'show')->name('inhouse_orders.show');

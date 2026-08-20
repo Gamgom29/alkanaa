@@ -118,14 +118,7 @@
                         <i class="fa fa-heart"></i>
                     </a>
                     @php
-                        if (auth()->check()) {
-                            $cartCount = \App\Models\Cart::where('user_id', auth()->id())->count();
-                        } else {
-                            $tempUserId = session()->get('temp_user_id');
-                            $cartCount = $tempUserId
-                                ? \App\Models\Cart::where('temp_user_id', $tempUserId)->count()
-                                : 0;
-                        }
+                        $cartCount = \App\Utility\CartUtility::current_user_cart_query()->count();
                     @endphp
 
                     <a href="javascript:void(0);" class="text-dark fs-5 position-relative" id="nav-cart-area"

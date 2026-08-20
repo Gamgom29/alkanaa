@@ -82,6 +82,7 @@
         </div>
 
         <div class="card-body">
+            <x-table-wrapper>
             <table class="table aiz-table mb-0">
                 <thead>
                     <tr>
@@ -227,6 +228,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </x-table-wrapper>
             <div class="aiz-pagination">
                 {{ $products->appends(request()->input())->links() }}
             </div>

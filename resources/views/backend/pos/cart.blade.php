@@ -9,7 +9,7 @@
         @forelse ($carts as $key => $cartItem)
             @php
                 $product = $cartItem->product;
-                $stock = $cartItem->product->stocks->where('variant', $cartItem['variation'])->first();
+                $stock = $product?->stocks->where('variant', $cartItem['variation'])->first();
                 $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
                 $tax += cart_product_tax($cartItem, $product, false) * $cartItem['quantity'];
                 $cartID = $cartItem['id'];
@@ -21,15 +21,19 @@
                             <button class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="plus" data-field="qty-{{ $cartID }}">
                                 <i class="las la-plus"></i>
                             </button>
-                            <input type="text" name="qty-{{ $cartID }}" id="qty-{{ $cartID }}" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $cartItem['quantity'] }}" min="{{ $product->min_qty }}" max="{{ $stock->qty }}" onchange="updateQuantity({{ $cartID }})">
+                            <input type="text" name="qty-{{ $cartID }}" id="qty-{{ $cartID }}" class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" value="{{ $cartItem['quantity'] }}" min="{{ $product->min_qty ?? 1 }}" max="{{ $stock->qty ?? 0 }}" {{ !$stock ? 'disabled' : '' }} onchange="updateQuantity({{ $cartID }})">
                             <button class="btn col-auto btn-icon btn-sm fs-15" type="button" data-type="minus" data-field="qty-{{ $cartID }}">
                                 <i class="las la-minus"></i>
                             </button>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="text-truncate-2">{{ $product->name }}</div>
-                        <span class="span badge badge-inline fs-12 badge-soft-secondary">{{ $cartItem['variant'] }}</span>
+                        <div class="text-truncate-2">{{ $product->name ?? translate('Product no longer available') }}</div>
+                        @if ($stock)
+                            <span class="span badge badge-inline fs-12 badge-soft-secondary">{{ $cartItem['variant'] }}</span>
+                        @else
+                            <span class="span badge badge-inline fs-12 badge-soft-danger">{{ translate('Unavailable') }}</span>
+                        @endif
                     </div>
                     <div class="col-auto">
                         <div class="fs-12 opacity-60">{{ single_price($cartItem['price']) }} x {{ $cartItem['quantity'] }}</div>

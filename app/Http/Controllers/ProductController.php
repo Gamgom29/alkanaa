@@ -85,9 +85,11 @@ class ProductController extends Controller
         if ($request->search != null) {
             $sort_search = $request->search;
             $products = $products
-                ->where('name', 'like', '%' . $sort_search . '%')
-                ->orWhereHas('stocks', function ($q) use ($sort_search) {
-                    $q->where('sku', 'like', '%' . $sort_search . '%');
+                ->where(function ($q) use ($sort_search) {
+                    $q->where('name', 'like', '%' . $sort_search . '%')
+                        ->orWhereHas('stocks', function ($q2) use ($sort_search) {
+                            $q2->where('sku', 'like', '%' . $sort_search . '%');
+                        });
                 });
         }
 
@@ -151,9 +153,11 @@ class ProductController extends Controller
         if ($request->search != null) {
             $sort_search = $request->search;
             $products = $products
-                ->where('name', 'like', '%' . $sort_search . '%')
-                ->orWhereHas('stocks', function ($q) use ($sort_search) {
-                    $q->where('sku', 'like', '%' . $sort_search . '%');
+                ->where(function ($q) use ($sort_search) {
+                    $q->where('name', 'like', '%' . $sort_search . '%')
+                        ->orWhereHas('stocks', function ($q2) use ($sort_search) {
+                            $q2->where('sku', 'like', '%' . $sort_search . '%');
+                        });
                 });
         }
         if ($request->type != null) {
