@@ -387,6 +387,8 @@
         @endforeach
     </script>
 
+    @include('frontend.layouts.partials.app_js_globals')
+
     {{--
         Global "Add to Cart" handler + mini-cart toast. Used to be
         copy-pasted into ~9 separate page templates (classic/index.blade.php
