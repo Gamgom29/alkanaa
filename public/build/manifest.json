@@ -1,0 +1,49 @@
+{
+  "_alpine-BgVIVlBb.css": {
+    "file": "assets/alpine-BgVIVlBb.css",
+    "src": "_alpine-BgVIVlBb.css"
+  },
+  "_alpine-QrZ7R9eK.js": {
+    "file": "assets/alpine-QrZ7R9eK.js",
+    "name": "alpine",
+    "css": [
+      "assets/alpine-BgVIVlBb.css"
+    ]
+  },
+  "resources/css/admin.css": {
+    "file": "assets/admin-Bb23t68C.css",
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ],
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
+  "resources/css/storefront.css": {
+    "file": "assets/storefront-Bp7BMeEk.css",
+    "name": "storefront",
+    "names": [
+      "storefront.css"
+    ],
+    "src": "resources/css/storefront.css",
+    "isEntry": true
+  },
+  "resources/js/admin.js": {
+    "file": "assets/admin-BSpfezE9.js",
+    "name": "admin",
+    "src": "resources/js/admin.js",
+    "isEntry": true,
+    "imports": [
+      "_alpine-QrZ7R9eK.js"
+    ]
+  },
+  "resources/js/storefront.js": {
+    "file": "assets/storefront-BSpfezE9.js",
+    "name": "storefront",
+    "src": "resources/js/storefront.js",
+    "isEntry": true,
+    "imports": [
+      "_alpine-QrZ7R9eK.js"
+    ]
+  }
+}
