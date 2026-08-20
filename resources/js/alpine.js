@@ -1,9 +1,11 @@
 import Alpine from 'alpinejs';
+import Collapse from '@alpinejs/collapse';
 import { registerCarouselComponent } from './widgets/carousel';
 import { registerZoomComponent } from './widgets/zoom';
 import { registerFileUploadDirective } from './widgets/file-upload';
 import { registerSearchableSelectDirective } from './widgets/select';
 
+Alpine.plugin(Collapse);
 window.Alpine = Alpine;
 
 /**

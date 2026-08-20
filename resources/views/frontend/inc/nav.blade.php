@@ -1,8 +1,16 @@
-<header class="bg-light border-bottom pc">
+{{--
+    Storefront header. Converted from Bootstrap/AIZ (data-toggle, data-bs-toggle,
+    onmouseover="showMegaMenu()") to Tailwind + Alpine. Note: the mega-menu
+    hover handlers this used to call (showMegaMenu/hideMegaMenu/showSub/
+    cancelHide) didn't exist anywhere in the codebase before this conversion
+    — the category mega menu never actually worked; it's implemented fresh
+    here with Alpine, not ported.
+--}}
+<header class="hidden md:block bg-neutral-50 border-b border-neutral-200">
     <!-- Top Bar -->
-    <div class="top-bar bg-light border-bottom py-1 px-3" style="font-size: 13px;">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <div class="text-end text-muted">
+    <div class="border-b border-neutral-200 py-1.5 px-6 text-xs">
+        <div class="flex justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-neutral-500">
                 @if (app()->getLocale() == 'sa')
                     متجرك الأفضل لكل معدات المطاعم والمقاهي
                 @elseif(app()->getLocale() == 'cn')
@@ -10,65 +18,48 @@
                 @else
                     Your one-stop shop for all your restaurant and cafe equipment.
                 @endif
-                <img src="https://flagcdn.com/sa.svg" width="20" alt="SA Flag" style="margin-right: 5px;">
             </div>
-            <div class="text-start d-flex align-items-center gap-2 flex-wrap" style="font-size: 13px;">
-
-                <a href="{{ route('seller.login') }}" class="text-decoration-none text-dark">
-                    @if (app()->getLocale() == 'sa')
-                        سجل كبائع
-                    @elseif(app()->getLocale() == 'cn')
-                        註冊成為賣家
-                    @else
-                        {{ translate('Register as a Seller') }}
+            <div class="flex items-center gap-3 flex-wrap text-neutral-600">
+                <a href="{{ route('seller.login') }}" class="hover:text-neutral-900">
+                    @if (app()->getLocale() == 'sa') سجل كبائع
+                    @elseif(app()->getLocale() == 'cn') 註冊成為賣家
+                    @else {{ translate('Register as a Seller') }}
                     @endif
                 </a>
-                <span class="mx-1">|</span>
-                <a href="{{ route('faq') }}" class="text-decoration-none text-dark">
-                    @if (app()->getLocale() == 'sa')
-                        الأسئلة الشائعة
-                    @elseif(app()->getLocale() == 'cn')
-                        常见问题
-                    @else
-                        FAQs
+                <span class="text-neutral-300">|</span>
+                <a href="{{ route('faq') }}" class="hover:text-neutral-900">
+                    @if (app()->getLocale() == 'sa') الأسئلة الشائعة
+                    @elseif(app()->getLocale() == 'cn') 常见问题
+                    @else FAQs
                     @endif
                 </a>
-                <span class="mx-1">|</span>
-
-                <a href="{{ route('orders.track') }}" class="text-decoration-none text-dark">
-                    @if (app()->getLocale() == 'sa')
-                        تتبع طلبك
-                    @elseif(app()->getLocale() == 'cn')
-                        订单追踪
-                    @else
-                        Track Your Order
+                <span class="text-neutral-300">|</span>
+                <a href="{{ route('orders.track') }}" class="hover:text-neutral-900">
+                    @if (app()->getLocale() == 'sa') تتبع طلبك
+                    @elseif(app()->getLocale() == 'cn') 订单追踪
+                    @else Track Your Order
                     @endif
                 </a>
+                <span class="text-neutral-300">|</span>
 
-                <span class="mx-1">|</span>
-
-                <!-- Language Dropdown -->
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
-                        id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div x-data="dropdown()" class="relative">
+                    <button type="button" x-on:click="toggle" class="flex items-center gap-1 rounded border border-neutral-300 px-2 py-1 hover:bg-white">
                         🌐 {{ strtoupper(app()->getLocale()) }}
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <ul x-show="open" x-on:click.outside="close" x-transition class="absolute right-0 mt-1 w-44 rounded-md border border-neutral-200 bg-white py-1 shadow-md z-20" style="display: none;">
                         @foreach (get_all_active_language() as $language)
                             <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2"
-                                    href="{{ url('language/' . $language->code) }}">
+                                <a href="{{ url('language/' . $language->code) }}" class="flex items-center gap-2 px-3 py-1.5 text-neutral-700 hover:bg-neutral-50">
                                     @if ($language->code == 'sa')
-                                        <img src="https://flagcdn.com/sa.svg" width="20" alt="SA">
+                                        <img src="https://flagcdn.com/sa.svg" width="18" alt="SA">
                                     @elseif($language->code == 'en')
-                                        <img src="https://flagcdn.com/gb.svg" width="20" alt="EN">
+                                        <img src="https://flagcdn.com/gb.svg" width="18" alt="EN">
                                     @elseif($language->code == 'cn')
-                                        <img src="https://flagcdn.com/cn.svg" width="20" alt="CN">
-                                        {{-- i want to add turkish and france another two language --}}
+                                        <img src="https://flagcdn.com/cn.svg" width="18" alt="CN">
                                     @elseif($language->code == 'fr')
-                                        <img src="https://flagcdn.com/fr.svg" width="20" alt="FR">
+                                        <img src="https://flagcdn.com/fr.svg" width="18" alt="FR">
                                     @elseif($language->code == 'tr')
-                                        <img src="https://flagcdn.com/tr.svg" width="20" alt="TR">
+                                        <img src="https://flagcdn.com/tr.svg" width="18" alt="TR">
                                     @endif
                                     {{ $language->name }}
                                 </a>
@@ -77,118 +68,109 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 
     <!-- Middle Nav -->
-    <div class="container-fluid pe-5 ps-5">
-        <div class="row justify-content-between align-items-center py-2">
-            <div class="col-xl-2 col-lg-2 col-md-2 my-auto">
-                <a class="navbar-brand" href="{{ route('home') }}">
-                    @php $header_logo = get_setting('header_logo'); @endphp
-                    @if ($header_logo)
-                        <img src="{{ uploaded_asset($header_logo) }}" class="logo-header">
-                    @else
-                        <img src="{{ static_asset('assets/img/logo.png') }}" class="logo-header">
-                    @endif
-                </a>
-            </div>
-            <div class="col-xl-7 col-lg-7 col-md-7 my-auto">
-                <form action="{{ route('search') }}" method="GET">
-                    <div class="input-group">
-                        <button class="btn text-white rounded-0" type="submit" style="background-color: #ae2025;">
-                            <i class="fa-solid fa-magnifying-glass m-1"></i> {{ translate('Search') }}
-                        </button>
-                        <input type="text" name="keyword" class="form-control mb-0 rounded-0"
-                            placeholder="{{ translate('Search...') }}">
-                    </div>
-                </form>
-            </div>
-            <div class="col-xl-3">
-                <div class="d-flex w-100 align-items-center gap-4">
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="text-dark fs-5"><i class="fa fa-user"></i></a>
-                    @else
-                        <a href="{{ route('user.login') }}"
-                            class="text-dark text-decoration-none small">{{ translate('login') }}</a>
-                        <a href="{{ route('user.login') }}" class="text-dark fs-5"><i class="fa fa-user"></i></a>
-                    @endauth
-                    <a href="{{ route('wishlists.index') }}" class="text-dark fs-5 position-relative">
-                        <i class="fa fa-heart"></i>
-                    </a>
-                    @php
-                        $cartCount = \App\Utility\CartUtility::current_user_cart_query()->count();
-                    @endphp
+    <div class="px-6 py-3">
+        <div class="flex items-center gap-6">
+            <a href="{{ route('home') }}" class="shrink-0">
+                @php $header_logo = get_setting('header_logo'); @endphp
+                @if ($header_logo)
+                    <img src="{{ uploaded_asset($header_logo) }}" class="h-10" alt="{{ get_setting('website_name') }}">
+                @else
+                    <img src="{{ static_asset('assets/img/logo.png') }}" class="h-10" alt="{{ get_setting('website_name') }}">
+                @endif
+            </a>
 
-                    <a href="javascript:void(0);" class="text-dark fs-5 position-relative" id="nav-cart-area"
-                        onclick="openCartOffcanvas()">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span
-                            class="cart-count-span position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
-                            style="font-size: 10px;">
-                            {{ $cartCount }}
-                        </span>
-                    </a>
-
+            <form action="{{ route('search') }}" method="GET" class="flex-1 max-w-2xl">
+                <div class="flex">
+                    <input type="text" name="keyword" class="flex-1 rounded-l-md border border-neutral-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" placeholder="{{ translate('Search...') }}">
+                    <button type="submit" class="rounded-r-md bg-primary px-4 text-white hover:bg-primary-dark">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span class="sr-only">{{ translate('Search') }}</span>
+                    </button>
                 </div>
+            </form>
+
+            <div class="flex items-center gap-5 ml-auto shrink-0">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="text-neutral-700 hover:text-primary text-lg"><i class="fa fa-user"></i></a>
+                @else
+                    <a href="{{ route('user.login') }}" class="text-sm text-neutral-700 hover:text-primary">{{ translate('login') }}</a>
+                @endauth
+                <a href="{{ route('wishlists.index') }}" class="text-neutral-700 hover:text-primary text-lg">
+                    <i class="fa fa-heart"></i>
+                </a>
+
+                @php
+                    $cartCount = \App\Utility\CartUtility::current_user_cart_query()->count();
+                @endphp
+                <button
+                    type="button"
+                    class="relative text-neutral-700 hover:text-primary text-lg"
+                    x-on:click="$dispatch('open-modal', { id: 'cart-drawer' })"
+                >
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-count-span absolute -top-2 -right-2 rounded-full bg-warning text-neutral-900 text-[10px] font-bold min-w-4 h-4 px-1 flex items-center justify-center">
+                        {{ $cartCount }}
+                    </span>
+                </button>
             </div>
         </div>
 
-        <!-- Navigation Links -->
-        <div class="row justify-content-center text-center">
+        <!-- Navigation Links + mega menu -->
+        <nav class="mt-2 flex justify-center">
+            <ul class="flex items-center gap-6 text-sm">
+                <li><a href="{{ route('home') }}" class="text-neutral-700 hover:text-primary">{{ translate('Home') }}</a></li>
+                <li><a href="{{ route('about.us') }}" class="text-neutral-700 hover:text-primary">{{ translate('About') }}</a></li>
+                <li
+                    class="relative"
+                    x-data="{
+                        open: false,
+                        activeCategory: null,
+                        closeTimer: null,
+                        show() { clearTimeout(this.closeTimer); this.open = true; },
+                        scheduleHide() { this.closeTimer = setTimeout(() => { this.open = false; }, 200); },
+                    }"
+                    x-on:mouseenter="show"
+                    x-on:mouseleave="scheduleHide"
+                >
+                    <a href="{{ route('search') }}" class="text-neutral-700 hover:text-primary">
+                        {{ translate('All Products') }}
+                    </a>
 
-            <div class="col-xl-8 col-lg-8 col-md-8 mb-2">
-                <ul
-                    style="display: flex; gap: 26px; list-style: none; padding: 0; margin: 0; font-size: 16px; justify-content: center;">
-                    <li><a href="{{ route('home') }}" class=" text-dark">{{ translate('Home') }}</a></li>
-                    <li><a href="{{ route('about.us') }}" class=" text-dark">{{ translate('About') }}</a></li>
-                    <li class="nav-item position-relative mega-category">
-                        <a href="{{ route('search') }}" class=" text-dark nav-link" style="font-size: 16px;"
-                            onmouseover="showMegaMenu()" onmouseout="hideMegaMenu()">
-                            {{ translate('All Products') }}
-                        </a>
-
-                        <!-- Mega Menu -->
-                        <div class="@if (App::getLocale() == 'en' || App::getLocale() == 'cn') mega-menu-ltr @else mega-menu @endif"
-                            id="megaMenu" onmouseover="cancelHide()" onmouseout="hideMegaMenu()">
-                            <ul class="category-list">
-                                @foreach ($categories->where('featured', 1) as $category)
-                                    <li data-sub="cat-{{ $category->id }}" onmouseover="showSub(this)">
-                                        <a href="{{ route('products.category', $category->slug) }}">
-                                            <div class="d-flex justify-content-between">
-                                                <div style="width: 15%; margin: 0 10px;">
-                                                    <img src="{{ uploaded_asset($category->icon) }}"
-                                                        style="width: 30px; height: 30px;">
-                                                </div>
-                                                <div style="width: 85%;">
-                                                    {{ $category->getTranslation('name') }}
-                                                </div>
-                                            </div>
-
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                            <div class="subcategories-wrapper">
-                                <div class="sub-category-container" id="activeSubCategory"></div>
-                                @foreach ($categories as $category)
-                                    <template id="cat-{{ $category->id }}">
-                                        @if ($category->childrenCategories && $category->childrenCategories->count())
+                    <div
+                        x-show="open"
+                        x-transition
+                        class="absolute {{ App::getLocale() == 'sa' ? 'right-0' : 'left-0' }} top-full mt-2 flex w-[46rem] max-w-[90vw] rounded-md border border-neutral-200 bg-white shadow-md z-30"
+                        style="display: none;"
+                    >
+                        <ul class="w-64 shrink-0 border-r border-neutral-100 py-2">
+                            @foreach ($categories->where('featured', 1) as $category)
+                                <li x-on:mouseenter="activeCategory = {{ $category->id }}">
+                                    <a href="{{ route('products.category', $category->slug) }}" class="flex items-center gap-3 px-4 py-2 hover:bg-neutral-50" :class="{ 'bg-neutral-50': activeCategory === {{ $category->id }} }">
+                                        <img src="{{ uploaded_asset($category->icon) }}" class="size-6 object-contain">
+                                        <span class="text-sm text-neutral-800">{{ $category->getTranslation('name') }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <div class="flex-1 p-4 max-h-96 overflow-y-auto">
+                            @foreach ($categories as $category)
+                                <div x-show="activeCategory === {{ $category->id }}" style="display: none;">
+                                    @if ($category->childrenCategories && $category->childrenCategories->count())
+                                        <div class="grid grid-cols-2 gap-4">
                                             @foreach ($category->childrenCategories as $child)
-                                                <div class="sub-group">
-                                                    <h5 class="sub-group-title"
-                                                        data-sub="subcat-{{ $child->id }}">
-                                                        <a href="{{ route('products.category', $child->slug) }}">
-                                                            ● {{ $child->getTranslation('name') }}
-                                                        </a>
-                                                    </h5>
+                                                <div>
+                                                    <a href="{{ route('products.category', $child->slug) }}" class="block font-semibold text-sm text-neutral-900 mb-1">
+                                                        {{ $child->getTranslation('name') }}
+                                                    </a>
                                                     @if ($child->childrenCategories && $child->childrenCategories->count())
-                                                        <ul class="third-level-list">
+                                                        <ul class="space-y-1">
                                                             @foreach ($child->childrenCategories as $grandChild)
                                                                 <li>
-                                                                    <a
-                                                                        href="{{ route('products.category', $grandChild->slug) }}">
+                                                                    <a href="{{ route('products.category', $grandChild->slug) }}" class="text-sm text-neutral-500 hover:text-primary">
                                                                         {{ $grandChild->getTranslation('name') }}
                                                                     </a>
                                                                 </li>
@@ -197,211 +179,132 @@
                                                     @endif
                                                 </div>
                                             @endforeach
-                                        @else
-                                            <p class="text-muted">{{ translate('No Subcategories') }}</p>
-                                        @endif
-                                    </template>
-                                @endforeach
-                            </div>
+                                        </div>
+                                    @else
+                                        <p class="text-sm text-neutral-500">{{ translate('No Subcategories') }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
                         </div>
-                    </li>
-                    <li><a href="{{ route('get-a-quote') }}"
-                            class="text-decoration-none text-dark">{{ translate('get_quote') }}</a></li>
-                    <li><a href="{{ route('service-request') }}"
-                            class="text-decoration-none text-dark">{{ translate('service_request') }}</a></li>
-                    <li><a href="{{ route('maintainence-request') }}"
-                            class="text-decoration-none text-dark">{{ translate('maintainence_request') }}</a></li>
-                    <li>
-                        <a class="text-decoration-none text-dark"
-                            href="{{ route('all-our-partners') }}">{{ translate('partners') }}</a>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+                <li><a href="{{ route('get-a-quote') }}" class="text-neutral-700 hover:text-primary">{{ translate('get_quote') }}</a></li>
+                <li><a href="{{ route('service-request') }}" class="text-neutral-700 hover:text-primary">{{ translate('service_request') }}</a></li>
+                <li><a href="{{ route('maintainence-request') }}" class="text-neutral-700 hover:text-primary">{{ translate('maintainence_request') }}</a></li>
+                <li><a href="{{ route('all-our-partners') }}" class="text-neutral-700 hover:text-primary">{{ translate('partners') }}</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Mobile header -->
+<header class="md:hidden bg-neutral-50 border-b border-neutral-200">
+    <div class="flex items-center justify-between px-4 py-3">
+        <a href="{{ route('home') }}">
+            @php $header_logo = get_setting('header_logo'); @endphp
+            @if ($header_logo)
+                <img src="{{ uploaded_asset($header_logo) }}" class="h-8" alt="{{ get_setting('website_name') }}">
+            @else
+                <img src="{{ static_asset('assets/img/logo.png') }}" class="h-8" alt="{{ get_setting('website_name') }}">
+            @endif
+        </a>
+
+        <div class="flex items-center gap-4">
+            <button type="button" class="relative text-neutral-700 text-lg" x-on:click="$dispatch('open-modal', { id: 'cart-drawer' })">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="cart-count-span absolute -top-2 -right-2 rounded-full bg-warning text-neutral-900 text-[10px] font-bold min-w-4 h-4 px-1 flex items-center justify-center">
+                    {{ $cartCount ?? 0 }}
+                </span>
+            </button>
+            <button type="button" class="text-neutral-700 text-xl" x-on:click="$dispatch('open-modal', { id: 'mobile-nav' })" aria-label="{{ translate('Menu') }}">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
     </div>
 </header>
 
-<header class="mob">
-    <!-- Mobile Navbar with Dynamic Mega Menu -->
-    <nav class="navbar navbar-light bg-light d-md-none">
-        <div class="container-fluid justify-content-between">
-            <!-- Logo -->
-            <a class="navbar-brand" href="{{ route('home') }}">
-                @php $header_logo = get_setting('header_logo'); @endphp
-                @if ($header_logo)
-                    <img src="{{ uploaded_asset($header_logo) }}" class="logo-header" alt="Logo">
-                @else
-                    <img src="{{ static_asset('assets/img/logo.png') }}" class="logo-header" alt="Logo">
-                @endif
-            </a>
+<x-drawer-shell id="mobile-nav" side="{{ App::getLocale() == 'sa' ? 'end' : 'start' }}" width="max-w-xs">
+    <div class="p-4">
+        <ul class="space-y-3">
+            <li><a href="{{ route('home') }}" class="font-semibold text-neutral-900">{{ translate('Home') }}</a></li>
+            <li><a href="{{ route('about.us') }}" class="font-semibold text-neutral-900">{{ translate('About') }}</a></li>
 
-            <!-- Toggler Icon -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Offcanvas Menu -->
-    <div class="offcanvas offcanvas-start" style="padding-bottom: 80px" tabindex="-1" id="mobileMenu">
-        <div class="offcanvas-header">
-
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="list-unstyled ps-0">
-                <li class="mb-3">
-                    <a href="{{ route('home') }}" class="text-decoration-none fw-bold text-dark">
-                        {{ translate('Home') }}</a>
-                </li>
-
-                <li class="mb-3">
-                    <a href="{{ route('about.us') }}" class="text-decoration-none fw-bold text-dark">
-                        {{ translate('About') }}</a>
-                </li>
-
-                <!-- Products Accordion -->
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark d-block" data-bs-toggle="collapse"
-                        href="#productsMenu" role="button" aria-expanded="false" aria-controls="productsMenu">
-                        {{ translate('All Products') }}
-                    </a>
-
-                    <div class="collapse" id="productsMenu">
-                        <ul class="mt-3 @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') p-0 @else ps-3 @endif">
-                            @foreach ($categories->where('featured', 1) as $category)
-                                <li class="mb-3">
-                                    <a class="text-decoration-none text-muted d-block" data-bs-toggle="collapse"
-                                        href="#sub-{{ $category->id }}" role="button" aria-expanded="false"
-                                        aria-controls="sub-{{ $category->id }}">
-                                        <div class="d-flex justify-content-between">
-                                            <div style="margin: 0 10px;">
-                                                <img src="{{ uploaded_asset($category->icon) }}"
-                                                    style="width: 30px; height: 30px;">
-                                            </div>
-                                            <div style="width: 85%; font-weight:800;">
-                                                {{ $category->getTranslation('name') }}
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    @if ($category->childrenCategories && $category->childrenCategories->count())
-                                        <div class="collapse" id="sub-{{ $category->id }}">
-                                            <ul class="pe-3 mt-1">
-                                                @foreach ($category->childrenCategories as $sub)
-                                                    <li class="mb-1">
-                                                        <a class="text-decoration-none text-muted d-block"
-                                                            data-bs-toggle="collapse"
-                                                            href="#subsub-{{ $sub->id }}" role="button"
-                                                            aria-expanded="false"
-                                                            aria-controls="subsub-{{ $sub->id }}">
-                                                            - {{ $sub->getTranslation('name') }}
-                                                        </a>
-
-                                                        @if ($sub->childrenCategories && $sub->childrenCategories->count())
-                                                            <div class="collapse" id="subsub-{{ $sub->id }}">
-                                                                <ul class="ps-3 mt-1">
-                                                                    @foreach ($sub->childrenCategories as $subsub)
-                                                                        <li>
-                                                                            <a href="{{ route('products.category', $subsub->slug) }}"
-                                                                                class="text-decoration-none text-muted">
-                                                                                --
-                                                                                {{ $subsub->getTranslation('name') }}
-                                                                            </a>
-                                                                        </li>
-                                                                    @endforeach
-                                                                </ul>
-                                                            </div>
-                                                        @endif
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="mb-3">
-                    <a href="{{ route('get-a-quote') }}"
-                        class="text-decoration-none fw-bold text-dark">{{ translate('get_quote') }}</a>
-                </li>
-
-                <li class="mb-3">
-                    <a href="{{ route('service-request') }}"
-                        class="text-decoration-none fw-bold text-dark">{{ translate('service_request') }}</a>
-                </li>
-
-                <li class="mb-3">
-                    <a href="{{ route('maintainence-request') }}"
-                        class="text-decoration-none fw-bold text-dark">{{ translate('maintainence_request') }}</a>
-                </li>
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark"
-                        href="{{ route('all-our-partners') }}">{{ translate('partners') }}</a>
-                </li>
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark"
-                        href="{{ route('user.login') }}">{{ translate('login') }}</a>
-                </li>
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark"
-                        href="{{ route('wishlists.index') }}">{{ translate('Wishlist') }}</a>
-                </li>
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark"
-                        href="{{ route('cart') }}">{{ translate('Cart') }}</a>
-                </li>
-            </ul>
-            <!-- Language Dropdown -->
-            <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary w-100 dropdown-toggle" type="button"
-                    id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    🌐 {{ strtoupper(app()->getLocale()) }}
+            <li x-data="dropdown()">
+                <button type="button" x-on:click="toggle" class="w-full flex items-center justify-between font-semibold text-neutral-900">
+                    {{ translate('All Products') }}
+                    <i class="fa fa-chevron-down text-xs transition-transform" :class="{ 'rotate-180': open }"></i>
                 </button>
-                <ul class="dropdown-menu w-100" aria-labelledby="languageDropdown">
-                    @foreach (get_all_active_language() as $language)
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-2"
-                                href="{{ url('language/' . $language->code) }}">
-                                @if ($language->code == 'sa')
-                                    <img src="https://flagcdn.com/sa.svg" width="20" alt="SA">
-                                @elseif($language->code == 'en')
-                                    <img src="https://flagcdn.com/gb.svg" width="20" alt="EN">
-                                @elseif($language->code == 'cn')
-                                    <img src="https://flagcdn.com/cn.svg" width="20" alt="CN">
+                <ul x-show="open" x-collapse class="mt-3 space-y-3 pl-3" style="display: none;">
+                    @foreach ($categories->where('featured', 1) as $category)
+                        <li x-data="dropdown()">
+                            <button type="button" x-on:click="toggle" class="w-full flex items-center justify-between gap-2 text-neutral-600">
+                                <span class="flex items-center gap-2">
+                                    <img src="{{ uploaded_asset($category->icon) }}" class="size-6 object-contain">
+                                    {{ $category->getTranslation('name') }}
+                                </span>
+                                @if ($category->childrenCategories && $category->childrenCategories->count())
+                                    <i class="fa fa-chevron-down text-xs transition-transform" :class="{ 'rotate-180': open }"></i>
                                 @endif
-                                {{ $language->name }}
-                            </a>
+                            </button>
+                            @if ($category->childrenCategories && $category->childrenCategories->count())
+                                <ul x-show="open" x-collapse class="mt-2 space-y-2 pl-4" style="display: none;">
+                                    @foreach ($category->childrenCategories as $sub)
+                                        <li x-data="dropdown()">
+                                            <button type="button" x-on:click="toggle" class="w-full flex items-center justify-between text-sm text-neutral-500">
+                                                {{ $sub->getTranslation('name') }}
+                                                @if ($sub->childrenCategories && $sub->childrenCategories->count())
+                                                    <i class="fa fa-chevron-down text-xs transition-transform" :class="{ 'rotate-180': open }"></i>
+                                                @endif
+                                            </button>
+                                            @if ($sub->childrenCategories && $sub->childrenCategories->count())
+                                                <ul x-show="open" x-collapse class="mt-2 space-y-1 pl-4" style="display: none;">
+                                                    @foreach ($sub->childrenCategories as $subsub)
+                                                        <li>
+                                                            <a href="{{ route('products.category', $subsub->slug) }}" class="text-sm text-neutral-500 hover:text-primary">
+                                                                {{ $subsub->getTranslation('name') }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
-            </div>
+            </li>
+
+            <li><a href="{{ route('get-a-quote') }}" class="font-semibold text-neutral-900">{{ translate('get_quote') }}</a></li>
+            <li><a href="{{ route('service-request') }}" class="font-semibold text-neutral-900">{{ translate('service_request') }}</a></li>
+            <li><a href="{{ route('maintainence-request') }}" class="font-semibold text-neutral-900">{{ translate('maintainence_request') }}</a></li>
+            <li><a href="{{ route('all-our-partners') }}" class="font-semibold text-neutral-900">{{ translate('partners') }}</a></li>
+            <li><a href="{{ route('user.login') }}" class="font-semibold text-neutral-900">{{ translate('login') }}</a></li>
+            <li><a href="{{ route('wishlists.index') }}" class="font-semibold text-neutral-900">{{ translate('Wishlist') }}</a></li>
+            <li><a href="{{ route('cart') }}" class="font-semibold text-neutral-900">{{ translate('Cart') }}</a></li>
+        </ul>
+
+        <div x-data="dropdown()" class="relative mt-4">
+            <button type="button" x-on:click="toggle" class="w-full flex items-center justify-center gap-1 rounded-md border border-neutral-300 px-3 py-2 text-sm">
+                🌐 {{ strtoupper(app()->getLocale()) }}
+            </button>
+            <ul x-show="open" x-on:click.outside="close" x-transition class="mt-1 w-full rounded-md border border-neutral-200 bg-white py-1 shadow-md" style="display: none;">
+                @foreach (get_all_active_language() as $language)
+                    <li>
+                        <a href="{{ url('language/' . $language->code) }}" class="flex items-center gap-2 px-3 py-1.5 text-neutral-700 hover:bg-neutral-50">
+                            @if ($language->code == 'sa')
+                                <img src="https://flagcdn.com/sa.svg" width="18" alt="SA">
+                            @elseif($language->code == 'en')
+                                <img src="https://flagcdn.com/gb.svg" width="18" alt="EN">
+                            @elseif($language->code == 'cn')
+                                <img src="https://flagcdn.com/cn.svg" width="18" alt="CN">
+                            @endif
+                            {{ $language->name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
-</header>
-<script>
-    function openCartOffcanvas() {
-        const el = document.getElementById('cartOffcanvas');
-        if (!el || typeof bootstrap === 'undefined') {
-            window.location.href = "{{ route('cart') }}";
-            return;
-        }
-
-        const open = function () {
-            bootstrap.Offcanvas.getOrCreateInstance(el).show();
-        };
-
-        if (typeof refreshCartToast === 'function') {
-            const request = refreshCartToast();
-            if (request && typeof request.always === 'function') {
-                request.always(open);
-                return;
-            }
-        }
-
-        open();
-    }
-</script>
+</x-drawer-shell>

@@ -168,6 +168,7 @@
 </head>
 <body>
     <x-toast-container />
+    @include('frontend.partials.cart.cart_summary_toast')
 
     <!-- aiz-main-wrapper -->
     <div class="aiz-main-wrapper d-flex flex-column bg-white">

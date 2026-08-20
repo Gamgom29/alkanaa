@@ -807,7 +807,6 @@
 
 
 
-    @include('frontend.partials.cart.cart_summary_toast')
 @endsection
 
 @section('script')
