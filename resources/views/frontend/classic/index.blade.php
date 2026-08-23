@@ -504,6 +504,225 @@
                 justify-content: center;
             }
         }
+
+        /* ===================== Homepage visual overhaul ===================== */
+        :root {
+            --brand: #ae2025;
+            --brand-dark: #8a1a1e;
+            --ink: #1f2430;
+            --muted: #6b7280;
+            --surface: #ffffff;
+            --surface-soft: #f6f7f9;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-soft: 0 6px 20px rgba(17, 24, 39, .07);
+            --shadow-hover: 0 14px 32px rgba(17, 24, 39, .14);
+        }
+
+        /* Section headings, unified */
+        section h2 {
+            position: relative;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: var(--ink);
+            margin-bottom: 2rem !important;
+            padding-bottom: 14px;
+        }
+
+        section h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 4px;
+            border-radius: 4px;
+            background: var(--brand);
+        }
+
+        section {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        /* Unified circular icon-nav button used by every slider/carousel in this page */
+        .icon-nav-btn {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid #eef0f2;
+            background: var(--surface);
+            color: var(--ink);
+            box-shadow: var(--shadow-soft);
+            transition: all .2s ease;
+            font-size: 15px;
+        }
+
+        .icon-nav-btn:hover {
+            background: var(--brand);
+            color: #fff;
+            border-color: var(--brand);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .icon-nav-btn:active {
+            transform: translateY(-50%) scale(.96);
+        }
+
+        /* Main banner carousel controls -> replace bootstrap default glyphs */
+        .mainbanner .carousel-control-prev,
+        .mainbanner .carousel-control-next {
+            width: 48px;
+            height: 48px;
+            top: 50%;
+            bottom: auto;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .92);
+            box-shadow: var(--shadow-soft);
+            opacity: 1;
+            transition: all .2s ease;
+        }
+
+        .mainbanner .carousel-control-prev {
+            left: 16px;
+        }
+
+        .mainbanner .carousel-control-next {
+            right: 16px;
+        }
+
+        .mainbanner .carousel-control-prev:hover,
+        .mainbanner .carousel-control-next:hover {
+            background: var(--brand);
+        }
+
+        .mainbanner .carousel-control-prev i,
+        .mainbanner .carousel-control-next i {
+            font-size: 16px;
+            color: var(--ink);
+            transition: color .2s ease;
+        }
+
+        .mainbanner .carousel-control-prev:hover i,
+        .mainbanner .carousel-control-next:hover i {
+            color: #fff;
+        }
+
+        /* Wishlist (heart) icon button on product cards */
+        .wishlist-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--surface);
+            box-shadow: var(--shadow-soft);
+            transition: all .2s ease;
+        }
+
+        .wishlist-btn:hover {
+            background: var(--brand);
+            box-shadow: var(--shadow-hover);
+            transform: scale(1.08);
+        }
+
+        .wishlist-btn:hover i {
+            color: #fff !important;
+        }
+
+        .wishlist-btn i {
+            transition: color .2s ease;
+        }
+
+        /* Product cards */
+        .best-seller .card,
+        .main-arrivals .card {
+            border: 1px solid #f0f1f3;
+            border-radius: var(--radius-lg) !important;
+            box-shadow: var(--shadow-soft);
+            transition: transform .25s ease, box-shadow .25s ease;
+            overflow: hidden;
+        }
+
+        .best-seller .card:hover,
+        .main-arrivals .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .best-seller .product-img,
+        .main-arrivals .card-img-top {
+            background: var(--surface-soft);
+            border-radius: var(--radius-md);
+            padding: 10px;
+        }
+
+        .add-to-cart-btn {
+            border-radius: 999px !important;
+            font-weight: 600;
+            transition: filter .2s ease, transform .15s ease;
+        }
+
+        .add-to-cart-btn:hover:not(:disabled) {
+            filter: brightness(1.08);
+        }
+
+        .add-to-cart-btn:active:not(:disabled) {
+            transform: scale(.98);
+        }
+
+        /* Category slider items -> chip cards instead of bare image+text */
+        .category-slider .slider-item {
+            text-align: center;
+            transition: transform .2s ease;
+        }
+
+        .category-slider .slider-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .category-slider .slider-item img {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--surface-soft);
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .category-slider .slider-item:hover img {
+            border-color: var(--brand);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .category-slider .slider-item p {
+            margin-top: 10px;
+            margin-bottom: 0;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        /* Partner / brand logo tiles */
+        .partners .sub-partner,
+        .logos .sub-logo {
+            background: var(--surface);
+            border: 1px solid #f0f1f3;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow .2s ease, transform .2s ease;
+        }
+
+        .partners .sub-partner:hover,
+        .logos .sub-logo:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
     </style>
 @endsection
 
@@ -539,14 +758,12 @@
 
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide"
                                 data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"
-                                    style="filter: invert(100%);"></span>
+                                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide"
                                 data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"
-                                    style="filter: invert(100%);"></span>
+                                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
@@ -579,14 +796,12 @@
 
                             <button class="carousel-control-prev" type="button"
                                 data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"
-                                    style="filter: invert(100%);"></span>
+                                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button"
                                 data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"
-                                    style="filter: invert(100%);"></span>
+                                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
@@ -602,7 +817,9 @@
             <h2 class="mb-4">{{ translate('Categories') }}</h2>
             <div class="position-relative">
                 <button
-                    class="slider-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn @else prev-btn @endif">&#10094;</button>
+                    class="slider-btn icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn @else prev-btn @endif">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
 
                 <div class="category-slider d-flex overflow-hidden justify-content-center" id="slider">
                     @foreach ($main_categories as $category)
@@ -619,7 +836,9 @@
                 </div>
 
                 <button
-                    class="slider-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn @else next-btn @endif">&#10095;</button>
+                    class="slider-btn icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn @else next-btn @endif">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </section>
@@ -684,8 +903,7 @@
 
                                         <div class="position-absolute top-0 end-0 m-2 z-1">
                                             <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})"
-                                                class="text-dark p-2 d-inline-flex align-items-center justify-content-center"
-                                                style="width: 36px; height: 36px;">
+                                                class="wishlist-btn text-dark d-inline-flex align-items-center justify-content-center">
                                                 <i class="la la-heart-o" style="font-size: 18px; color: #ae2025;"></i>
                                             </a>
                                         </div>
@@ -783,7 +1001,9 @@
                 <h2>{{ translate('Deal of The Week') }}</h2>
                 <div class="position-relative">
                     <button
-                        class="slider-btn-arrivals @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn-arrivals @else prev-btn-arrivals @endif">&#10094;</button>
+                        class="slider-btn-arrivals icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn-arrivals @else prev-btn-arrivals @endif">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
 
                     <div class="category-slider-arrivals d-flex overflow-auto" id="slider-arrivals">
                         @foreach ($deal_of_the_week as $product)
@@ -868,7 +1088,9 @@
                     </div>
 
                     <button
-                        class="slider-btn-arrivals @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn-arrivals @else next-btn-arrivals @endif">&#10095;</button>
+                        class="slider-btn-arrivals icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn-arrivals @else next-btn-arrivals @endif">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </section>
@@ -881,7 +1103,9 @@
                 <h2>{{ translate('New Arrivals') }}</h2>
                 <div class="position-relative">
                     <button
-                        class="slider-btn-arrivals @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn-arrivals @else prev-btn-arrivals @endif">&#10094;</button>
+                        class="slider-btn-arrivals icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') next-btn-arrivals @else prev-btn-arrivals @endif">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
 
                     <div class="category-slider-arrivals d-flex justify-content-center overflow-hidden"
                         id="slider-arrivals">
@@ -968,7 +1192,9 @@
                     </div>
 
                     <button
-                        class="slider-btn-arrivals @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn-arrivals @else next-btn-arrivals @endif">&#10095;</button>
+                        class="slider-btn-arrivals icon-nav-btn @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') prev-btn-arrivals @else next-btn-arrivals @endif">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </section>
@@ -1064,7 +1290,9 @@
             <h2 class="text-center mb-4">{{ translate('partners') }}</h2>
             <div class="container">
                 <div class="position-relative">
-                    <button class="slider-btn-partners prev-btn-partners">&#10094;</button>
+                    <button class="slider-btn-partners icon-nav-btn prev-btn-partners">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
 
                     <div class="d-flex overflow-hidden category-slider-partners" id="partner-slider">
                         @foreach ($partners as $partner)
@@ -1075,7 +1303,9 @@
                         @endforeach
                     </div>
 
-                    <button class="slider-btn-partners next-btn-partners">&#10095;</button>
+                    <button class="slider-btn-partners icon-nav-btn next-btn-partners">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </section>
@@ -1085,28 +1315,9 @@
         .slider-btn-partners {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-            background-color: #fff;
-            /* خلفية بيضاء */
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            width: 45px;
-            height: 45px;
             z-index: 10;
-            border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            /* ظل ناعم */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .slider-btn-partners:hover {
-            background-color: #f5f5f5;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
-            /* ظل أقوى عند الهوفر */
+            border: none;
+            cursor: pointer;
         }
 
         .prev-btn-partners {
