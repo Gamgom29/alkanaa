@@ -1,11 +1,11 @@
 <style>
     /* المتغيّرات محليّة على عنصر الشريط نفسه */
     .dmnt-bar {
-        --dmnt-primary: #2e7d32;
-        --dmnt-primary-rgb: 46, 125, 50;
+        --dmnt-primary: #ae2025;
+        --dmnt-primary-rgb: 174, 32, 37;
         --dmnt-text: #111827;
         --dmnt-muted: #6b7280;
-        --dmnt-bg: rgba(255, 255, 255, .92);
+        --dmnt-bg: rgba(255, 255, 255, .95);
         --dmnt-divider: #e5e7eb;
         --dmnt-badge: #ff7a00;
         --dmnt-radius: 14px;
