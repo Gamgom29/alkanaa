@@ -957,6 +957,11 @@ echo get_setting('footer_script'); @endphp
     <script src="{{ static_asset('assets/front_js/bootstrap.js') }}"></script>
     <script src="{{ static_asset('assets/front_js/index.js') }}"></script>
 
+<!-- Popper & Bootstrap 5 JS — required by every data-bs-toggle element on the
+     site (category filter accordions, offcanvas menus, product tabs). Without
+     this, those elements render static HTML with no working toggle behavior. -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- Storefront JS (Swiper Carousels & Interactions) -->
 @vite(['resources/js/storefront.js'])
 
