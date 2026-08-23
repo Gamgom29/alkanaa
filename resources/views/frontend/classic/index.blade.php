@@ -451,10 +451,6 @@
 
 
         @media screen and (max-width:1000px) {
-            * {
-                overflow-x: hidden !important;
-            }
-
             .category-slider-arrivals {
                 flex-wrap: wrap;
             }
@@ -465,7 +461,8 @@
             }
 
             .slider-item-arrivals {
-                max-width: 325px !important;
+                max-width: min(325px, 85vw) !important;
+                width: min(325px, 85vw);
                 padding: 0;
             }
 
@@ -474,13 +471,14 @@
             }
 
             .slider-item-arrivals .card {
-                height: 360px;
-                width: 325px;
+                height: auto;
+                min-height: 320px;
+                width: 100%;
             }
 
             .main-arrivals .card-img-top {
-                width: 140px;
-                height: 160px;
+                width: 120px;
+                height: 140px;
                 object-fit: contain;
             }
 
@@ -706,6 +704,25 @@
             font-weight: 600;
             font-size: 14px;
             color: var(--ink);
+        }
+
+        .stainless-banner-img {
+            width: 100%;
+            height: 411px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+        }
+
+        @media (max-width: 991px) {
+            .stainless-banner-img {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .stainless-banner-img {
+                height: 220px;
+            }
         }
 
         /* Partner / brand logo tiles */
@@ -1238,14 +1255,14 @@
                     @if (app()->getLocale() == 'sa')
                         <a href="https://phpstack-1358664-5522133.cloudwaysapps.com/category/---nm2KU">
                             <img src="{{ static_asset('assets/front_img/stanlsbanner.jpeg') }}"
-                                style="width: 100%; height:411px;">
+                                class="stainless-banner-img">
                         </a>
                     @elseif(app()->getLocale() == 'cn')
                         <img src="{{ static_asset('assets/front_img/stainless-cn.jpg') }}"
-                            style="width: 100%; height:411px;">
+                            class="stainless-banner-img">
                     @elseif(app()->getLocale() == 'en')
                         <img src="{{ static_asset('assets/front_img/stainless-en.jpg') }}"
-                            style="width: 100%; height:411px;">
+                            class="stainless-banner-img">
                     @endif
                 </div>
                 <div class="col-xl-4 my-auto">

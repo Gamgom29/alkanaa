@@ -612,9 +612,9 @@
                         </div>
 
                         <!-- Products -->
-                        @foreach ($products->chunk(3) as $chunk)
-                            <div class="d-flex flex-wrap justify-content-between w-100">
-                                @foreach ($chunk as $key => $product)
+                        <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
+                            @foreach ($products as $key => $product)
+                                <div class="col d-flex">
                                     @if (isset($product_type) && $product_type == 'preorder_product')
                                         @include('preorder.frontend.product_box3', [
                                             'product' => $product,
@@ -627,10 +627,9 @@
                                             ['product' => $product]
                                         )
                                     @endif
-                                @endforeach
-
-                            </div>
-                        @endforeach
+                                </div>
+                            @endforeach
+                        </div>
 
 
                         <div class="d-flex justify-content-center">
