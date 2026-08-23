@@ -127,6 +127,9 @@
 
     <script>
         var AIZ = AIZ || {};
+        AIZ.routes = {
+            addToCart: '{{ route('cart.addToCart') }}',
+        };
         AIZ.local = {
             nothing_selected: '{!! translate('Nothing selected', null, true) !!}',
             nothing_found: '{!! translate('Nothing found', null, true) !!}',
