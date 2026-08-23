@@ -201,46 +201,71 @@
     </div>
 </header>
 
-<!-- Mobile Header -->
-<header class="d-lg-none royal-header-top sticky-top shadow-md mob">
-    <div class="px-4 py-2.5 flex items-center justify-between">
-        <!-- Toggler Icon -->
-        <button class="text-white text-xl p-1 focus:outline-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-label="Toggle navigation">
-            <i class="fa-solid fa-bars"></i>
-        </button>
+<!-- Mobile Header (Matching Exact Mobile Screenshot) -->
+<header class="d-lg-none sticky-top shadow-xs">
+    <!-- 1. Mobile Top Announcement -->
+    <div class="bg-white border-b border-neutral-100 py-1 px-3 text-center">
+        <div class="flex items-center justify-center gap-1.5 text-xs font-bold text-rose-600">
+            <img src="https://flagcdn.com/sa.svg" width="16" height="12" alt="SA Flag" class="rounded-xs">
+            <span>الخيار الأول للمطابخ التجارية في السعودية</span>
+        </div>
+    </div>
 
-        <!-- Logo -->
-        <a class="navbar-brand m-0" href="{{ route('home') }}">
+    <!-- 2. Mobile Brand Header Bar (Royal Blue) -->
+    <div class="royal-header-top py-2.5 px-4 text-center flex items-center justify-center">
+        <a href="{{ route('home') }}" class="flex items-center gap-2 text-white no-underline mx-auto">
             @php $header_logo = get_setting('header_logo'); @endphp
             @if ($header_logo)
-                <img src="{{ uploaded_asset($header_logo) }}" class="h-8 w-auto object-contain brightness-0 invert" alt="Logo">
+                <img src="{{ uploaded_asset($header_logo) }}" class="h-7 w-auto object-contain brightness-0 invert" alt="Logo">
             @else
-                <span class="text-lg font-extrabold tracking-wider text-white uppercase">{{ get_setting('website_name') ?? 'ALNASSER' }}</span>
+                <div class="flex items-center gap-2">
+                    <span class="flex size-7 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300 ring-2 ring-cyan-400/50">
+                        <i class="fa-solid fa-atom text-sm"></i>
+                    </span>
+                    <span class="text-lg font-extrabold tracking-wider text-white uppercase">{{ get_setting('website_name') ?? 'ALNASSER' }}</span>
+                </div>
             @endif
         </a>
-
-        <!-- Cart Button -->
-        <a href="javascript:void(0);" class="header-icon-action" style="width: 36px; height: 36px;" onclick="openCartOffcanvas()">
-            <i class="fa-solid fa-bag-shopping text-sm"></i>
-            <span class="header-icon-badge cart-count-span">{{ $cartCount }}</span>
-        </a>
     </div>
 
-    <!-- Mobile Search Bar -->
-    <div class="px-4 pb-2.5">
-        <form action="{{ route('search') }}" method="GET" class="w-full m-0">
-            <div class="header-search-pill" style="padding: 2px 8px;">
-                <button type="submit" class="p-1">
-                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                </button>
-                <input type="text" name="keyword"
-                    placeholder="@if (app()->getLocale() == 'sa') أبحث عن منتج... @else {{ translate('Search for products...') }} @endif"
-                    class="text-xs">
+    <!-- 3. Mobile Search & Action Sub-Bar -->
+    <div class="bg-white border-b border-neutral-200 py-2 px-3">
+        <div class="flex items-center gap-2">
+            <!-- Menu button: القائمة ☰ -->
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"
+                class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-neutral-200 bg-white text-xs font-bold text-neutral-800 shadow-2xs hover:bg-neutral-50 flex-shrink-0">
+                <span>القائمة</span>
+                <i class="fa-solid fa-bars text-xs"></i>
+            </button>
+
+            <!-- Search input with search icon on left -->
+            <div class="flex-1">
+                <form action="{{ route('search') }}" method="GET" class="m-0">
+                    <div class="relative flex items-center rounded-lg border border-neutral-200 bg-white px-2.5 py-1 shadow-2xs focus-within:border-primary">
+                        <button type="submit" class="p-0.5 text-neutral-400 focus:outline-none">
+                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </button>
+                        <input type="text" name="keyword"
+                            placeholder="ابحث عن منتج"
+                            class="w-full bg-transparent border-0 px-2 py-0.5 text-xs text-neutral-800 focus:outline-none">
+                    </div>
+                </form>
             </div>
-        </form>
+
+            <!-- Profile icon -->
+            @auth
+                <a href="{{ route('dashboard') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0">
+                    <i class="fa-solid fa-user text-xs"></i>
+                </a>
+            @else
+                <a href="{{ route('user.login') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0">
+                    <i class="fa-regular fa-user text-xs"></i>
+                </a>
+            @endauth
+        </div>
     </div>
 
-    <!-- Offcanvas Menu -->
+    <!-- Offcanvas Menu Drawer -->
     <div class="offcanvas offcanvas-start" style="padding-bottom: 80px;" tabindex="-1" id="mobileMenu">
         <div class="offcanvas-header bg-[#0c234a] text-white">
             <h5 class="offcanvas-title font-bold text-white">{{ get_setting('website_name') ?? 'ALNASSER' }}</h5>
@@ -331,22 +356,6 @@
                         <i class="fa fa-handshake text-muted"></i> {{ translate('partners') }}
                     </a>
                 </li>
-
-                <hr class="my-3">
-
-                @auth
-                    <li class="mb-3">
-                        <a class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2" href="{{ route('dashboard') }}">
-                            <i class="fa fa-user-circle text-primary"></i> {{ translate('My Dashboard') }}
-                        </a>
-                    </li>
-                @else
-                    <li class="mb-3">
-                        <a class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2" href="{{ route('user.login') }}">
-                            <i class="fa fa-sign-in text-muted"></i> {{ translate('login') }}
-                        </a>
-                    </li>
-                @endauth
             </ul>
         </div>
     </div>
