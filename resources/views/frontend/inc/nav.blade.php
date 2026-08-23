@@ -364,6 +364,51 @@
 </header>
 
 <script>
+    let megaMenuTimer = null;
+
+    function showMegaMenu() {
+        clearTimeout(megaMenuTimer);
+        const menu = document.getElementById('megaMenu');
+        if (!menu) return;
+        menu.style.display = 'flex';
+
+        // Auto load first category if activeSubCategory is empty
+        const container = document.getElementById('activeSubCategory');
+        const firstLi = menu.querySelector('.category-list li');
+        if (firstLi && (!container || container.innerHTML.trim() === '')) {
+            showSub(firstLi);
+        }
+    }
+
+    function hideMegaMenu() {
+        megaMenuTimer = setTimeout(function () {
+            const menu = document.getElementById('megaMenu');
+            if (menu) {
+                menu.style.display = 'none';
+            }
+        }, 200);
+    }
+
+    function cancelHide() {
+        clearTimeout(megaMenuTimer);
+    }
+
+    function showSub(el) {
+        if (!el) return;
+        const subId = el.getAttribute('data-sub');
+        const template = document.getElementById(subId);
+        const container = document.getElementById('activeSubCategory');
+        if (template && container) {
+            container.innerHTML = template.innerHTML;
+        }
+
+        const list = el.closest('.category-list');
+        if (list) {
+            list.querySelectorAll('li').forEach(li => li.classList.remove('active-cat'));
+            el.classList.add('active-cat');
+        }
+    }
+
     function openCartOffcanvas() {
         const el = document.getElementById('cartOffcanvas');
         if (!el || typeof bootstrap === 'undefined') {

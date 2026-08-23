@@ -229,7 +229,7 @@
                                         @include('frontend.partials.cart.payment_info', [
                                             'carts' => $carts,
                                             'total' => $total,
-                                        ])                         ])
+                                        ])
 
                                         <!-- Agree Box -->
                                         <div class="pt-2rem fs-14">
