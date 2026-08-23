@@ -1,69 +1,130 @@
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
+    <div class="alert alert-danger rounded-xl mb-4">
+        <ul class="mb-0">
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
 @endif
+
 @if(Auth::check())
-    @foreach (Auth::user()->addresses as $key => $address)
-        <div class="border mb-4">
-            <div class="row">
-                <div class="col-md-8">
-                    <label class="aiz-megabox d-block bg-white mb-0">
-                        <input type="radio" name="address_id" value="{{ $address->id }}" @if ($address->id == $address_id)
-                            checked
-                        @endif required>
-                        <span class="d-flex p-3 aiz-megabox-elem border-0">
-                            <!-- Checkbox -->
-                            <span class="aiz-rounded-check flex-shrink-0 mt-1"></span>
-                            <!-- Address -->
-                            <span class="flex-grow-1 pl-3 text-left">
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('Address') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ $address->address }}</span>
+    @php
+        $userAddresses = Auth::user()->addresses;
+    @endphp
+
+    @if ($userAddresses->count() > 0)
+        <div class="row gy-3 mb-4">
+            @foreach ($userAddresses as $key => $address)
+                @php
+                    $isSelected = ($address->id == $address_id) || ($address_id == null && $key == 0);
+                @endphp
+                <div class="col-md-6">
+                    <label class="d-block cursor-pointer position-relative h-100 mb-0">
+                        <input type="radio" name="address_id" value="{{ $address->id }}" class="d-none address-radio-input"
+                            @if ($isSelected) checked @endif required>
+                        <div class="p-3.5 rounded-2xl border transition-all h-100 address-card-box {{ $isSelected ? 'border-[#4868e6] bg-[#f0f4ff] shadow-sm' : 'border-neutral-200 bg-white hover:border-neutral-300' }}"
+                            style="cursor: pointer; min-height: 140px;">
+                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="custom-radio-circle flex size-5 items-center justify-center rounded-full border {{ $isSelected ? 'border-[#4868e6] bg-[#4868e6] text-white' : 'border-neutral-300 bg-white' }}">
+                                        <i class="fa-solid fa-check text-[10px] {{ $isSelected ? '' : 'd-none' }}"></i>
+                                    </span>
+                                    <span class="font-bold text-sm text-[#0c234a]">
+                                        {{ optional($address->city)->name ?? translate('Address') }} {{ $key + 1 }}
+                                    </span>
                                 </div>
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('Postal Code') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ $address->postal_code }}</span>
+                                <button type="button" class="btn btn-sm btn-link text-[#4868e6] text-xs font-bold p-0 text-decoration-none" onclick="edit_address('{{$address->id}}')">
+                                    <i class="fa-solid fa-pen-to-square"></i> {{ translate('Change') }}
+                                </button>
+                            </div>
+
+                            <div class="text-xs text-neutral-600 space-y-1 pe-4">
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <i class="fa-solid fa-location-dot text-neutral-400 text-xs"></i>
+                                    <span>{{ $address->address }}</span>
                                 </div>
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('City') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ optional($address->city)->name }}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('State') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ optional($address->state)->name }}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('Country') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ optional($address->country)->name }}</span>
-                                </div>
-                                <div class="row">
-                                    <span class="fs-14 text-secondary col-md-3 col-5">{{ translate('Phone') }}</span>
-                                    <span class="fs-14 text-dark fw-500 ml-2 col">{{ $address->phone }}</span>
-                                </div>
-                            </span>
-                        </span>
+                                @if (optional($address->city)->name || optional($address->country)->name)
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <i class="fa-solid fa-city text-neutral-400 text-xs"></i>
+                                        <span>{{ optional($address->city)->name }} {{ optional($address->country)->name ? ', ' . optional($address->country)->name : '' }}</span>
+                                    </div>
+                                @endif
+                                @if ($address->phone)
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <i class="fa-solid fa-phone text-neutral-400 text-xs"></i>
+                                        <span dir="ltr">{{ $address->phone }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </label>
                 </div>
-                <!-- Edit Address Button -->
-                <div class="col-md-4 p-3 text-right">
-                    <a class="btn btn-sm btn-secondary-base text-white mr-4 rounded-0 px-4" onclick="edit_address('{{$address->id}}')">{{ translate('Change') }}</a>
-                </div>
-            </div>
+            @endforeach
         </div>
-    @endforeach
 
-    <input type="hidden" name="checkout_type" value="logged">
-    <!-- Add New Address -->
-    <div class="border p-3 c-pointer text-center bg-light has-transition hov-bg-soft-light h-100 d-flex flex-column justify-content-center" onclick="add_new_address()">
-        <i class="las la-plus mb-1 fs-20 text-gray"></i>
-        <div class="alpha-7 fw-700">{{ translate('Add New Address') }}</div>
-    </div>
+        <input type="hidden" name="checkout_type" value="logged">
+
+        <!-- Add Another Address Button -->
+        <div class="mt-3">
+            <button type="button" class="btn border-2 border-dashed border-[#4868e6]/40 bg-[#4868e6]/5 text-[#4868e6] hover:bg-[#4868e6]/10 font-bold text-xs sm:text-sm py-3 px-5 rounded-xl w-100 d-flex align-items-center justify-content-center gap-2 transition"
+                onclick="add_new_address()">
+                <i class="fa-solid fa-plus"></i>
+                <span>{{ translate('Add New Address') }}</span>
+            </button>
+        </div>
+    @else
+        <!-- Empty Addresses State -->
+        <div class="text-center py-5 px-4 rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50/50">
+            <div class="flex size-14 items-center justify-center rounded-full bg-[#4868e6]/10 text-[#4868e6] mx-auto mb-3">
+                <i class="fa-solid fa-location-dot text-2xl"></i>
+            </div>
+            <h4 class="text-base font-bold text-[#0c234a] mb-1">
+                لا يوجد لديك أي عنوان شحن مسجل
+            </h4>
+            <p class="text-xs text-neutral-500 mb-4 max-w-sm mx-auto">
+                يرجى إضافة عنوانك لتتمكن من اختيار خيارات التوصيل وإتمام طلبك بكل سهولة
+            </p>
+            <input type="hidden" name="checkout_type" value="logged">
+            <button type="button" class="yellow-cta-btn px-6 py-2.5 text-sm font-bold shadow-sm" onclick="add_new_address()">
+                <i class="fa-solid fa-plus me-1"></i> إضافة عنوان جديد للشحن
+            </button>
+        </div>
+    @endif
 @else
-    <!-- Guest Shipping a address -->
+    <!-- Guest Shipping address -->
     @include('frontend.partials.cart.guest_shipping_info')
 @endif
+
+<script>
+    document.querySelectorAll('.address-radio-input').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.querySelectorAll('.address-card-box').forEach(function(card) {
+                card.classList.remove('border-[#4868e6]', 'bg-[#f0f4ff]', 'shadow-sm');
+                card.classList.add('border-neutral-200', 'bg-white');
+                const checkIcon = card.querySelector('.custom-radio-circle i');
+                const radioCircle = card.querySelector('.custom-radio-circle');
+                if (checkIcon) checkIcon.classList.add('d-none');
+                if (radioCircle) {
+                    radioCircle.classList.remove('border-[#4868e6]', 'bg-[#4868e6]', 'text-white');
+                    radioCircle.classList.add('border-neutral-300', 'bg-white');
+                }
+            });
+
+            if (this.checked) {
+                const parentCard = this.closest('label').querySelector('.address-card-box');
+                if (parentCard) {
+                    parentCard.classList.add('border-[#4868e6]', 'bg-[#f0f4ff]', 'shadow-sm');
+                    parentCard.classList.remove('border-neutral-200', 'bg-white');
+                    const checkIcon = parentCard.querySelector('.custom-radio-circle i');
+                    const radioCircle = parentCard.querySelector('.custom-radio-circle');
+                    if (checkIcon) checkIcon.classList.remove('d-none');
+                    if (radioCircle) {
+                        radioCircle.classList.add('border-[#4868e6]', 'bg-[#4868e6]', 'text-white');
+                        radioCircle.classList.remove('border-neutral-300', 'bg-white');
+                    }
+                }
+            }
+        });
+    });
+</script>
