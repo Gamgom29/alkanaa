@@ -1,20 +1,6 @@
 /*
- * Entry point for pages still on the legacy shell
- * (@extends('frontend.layouts.app')) that need a Tailwind utility or two
- * without a full page conversion. Deliberately omits Preflight — the file
- * only imports Tailwind's theme + utilities layers, skipping
- * tailwindcss/preflight.css — so it does not reset Bootstrap/AIZ's base
- * element styles on the ~165 pages that still depend on them.
- *
- * Cascade-layer note: layouts/app.blade.php registers a `legacy` layer
- * (wrapping the AIZ/Bootstrap <link> stylesheets) in an inline <style>
- * block that appears in <head> BEFORE this stylesheet is linked. CSS layer
- * priority is decided by the order layer names are first seen in the
- * document, not by specificity — so as long as that ordering holds,
- * `theme`/`utilities` below are registered after `legacy` and therefore
- * outrank it unconditionally. If this file is ever loaded before that
- * <style> block, the ordering — and every utility class on hybrid pages —
- * breaks silently. Do not reorder the <head>.
+ * Modern Storefront Styles & Design System
+ * Royal Blue / Navy theme matching AlNasser reference design
  */
 @import "./fonts.css";
 @import "tailwindcss/theme.css" layer(theme);
@@ -39,7 +25,195 @@ p, span, a, div, table, th, td, label {
     font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
-/* Floating WhatsApp Button */
+/* Custom Header Bar Styles */
+.royal-header-top {
+    background: linear-gradient(135deg, #0c234a 0%, #1a3c75 40%, #4868e6 100%);
+    color: #ffffff;
+}
+
+.header-search-pill {
+    background: #ffffff;
+    border-radius: 9999px;
+    padding: 3px 6px 3px 18px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[dir="rtl"] .header-search-pill {
+    padding: 3px 18px 3px 6px;
+}
+
+.header-search-pill input {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 14px;
+    color: #1e293b;
+    background: transparent;
+    width: 100%;
+}
+
+.header-search-pill button {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 16px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon-action {
+    color: #ffffff;
+    font-size: 18px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+}
+
+.header-icon-action:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+.header-icon-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #4868e6;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #0c234a;
+}
+
+[dir="rtl"] .header-icon-badge {
+    right: auto;
+    left: -3px;
+}
+
+/* Category Pedestal */
+.category-pedestal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none !important;
+    transition: transform 0.25s ease;
+}
+
+.category-pedestal-card:hover {
+    transform: translateY(-4px);
+}
+
+.category-pedestal-base {
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(72, 104, 230, 0.15) 0%, #4868e6 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(72, 104, 230, 0.2);
+    transition: all 0.25s ease;
+}
+
+@media (min-width: 640px) {
+    .category-pedestal-base {
+        width: 105px;
+        height: 105px;
+        border-radius: 24px;
+    }
+}
+
+.category-pedestal-card:hover .category-pedestal-base {
+    box-shadow: 0 8px 20px rgba(72, 104, 230, 0.35);
+    transform: scale(1.05);
+}
+
+/* Solution Equipment Card */
+.solution-equip-card {
+    background: #dbe6f0;
+    border-radius: 18px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    min-height: 240px;
+    transition: all 0.25s ease;
+    text-decoration: none !important;
+}
+
+.solution-equip-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(12, 35, 74, 0.1);
+}
+
+.yellow-cta-btn {
+    background-color: #fee028;
+    color: #0c234a;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 20px;
+    border-radius: 9999px;
+    display: inline-block;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.yellow-cta-btn:hover {
+    background-color: #facc15;
+    color: #071733;
+    transform: scale(1.05);
+}
+
+/* Blue Promo Offer Card */
+.blue-offer-card {
+    background: #4868e6;
+    border-radius: 18px;
+    padding: 16px 12px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    min-height: 230px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    text-decoration: none !important;
+}
+
+.blue-offer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(72, 104, 230, 0.35);
+    color: #ffffff;
+}
+
+/* Floating WhatsApp */
 .whatsapp-float {
     position: fixed;
     bottom: 24px;
@@ -47,8 +221,8 @@ p, span, a, div, table, th, td, label {
     background-color: #25d366;
     color: #ffffff !important;
     border-radius: 50%;
-    width: 56px;
-    height: 56px;
+    width: 54px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,8 +246,8 @@ p, span, a, div, table, th, td, label {
     background-color: #25d366;
     color: #ffffff !important;
     border-radius: 50%;
-    width: 56px;
-    height: 56px;
+    width: 54px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
