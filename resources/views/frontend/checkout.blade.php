@@ -112,7 +112,6 @@
                         <div class="accordion" id="accordioncCheckoutInfo">
 
                             <!-- Shipping Info -->
-                            <!-- Shipping Info -->
                             <div class="card checkout-card border shadow-none">
                                 <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingShippingInfo"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseShippingInfo" data-toggle="collapse" data-target="#collapseShippingInfo"
@@ -128,8 +127,7 @@
                                     </div>
                                     <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapseShippingInfo" class="collapse show" aria-labelledby="headingShippingInfo"
-                                    data-bs-parent="#accordioncCheckoutInfo" data-parent="#accordioncCheckoutInfo">
+                                <div id="collapseShippingInfo" class="collapse show" aria-labelledby="headingShippingInfo">
                                     <div class="card-body p-3 p-md-4" id="shipping_info">
                                         @include('frontend.partials.cart.shipping_info', [
                                             'address_id' => $address_id,
@@ -156,8 +154,7 @@
                                         <i class="las la-angle-down fs-18"></i>
                                     </div>
 
-                                    <div id="collapseServiceInfo" class="collapse show" aria-labelledby="headingServiceInfo"
-                                        data-bs-parent="#accordioncCheckoutInfo" data-parent="#accordioncCheckoutInfo">
+                                    <div id="collapseServiceInfo" class="collapse show" aria-labelledby="headingServiceInfo">
                                         <div class="card-body p-3 p-md-4" id="service_info">
                                             <div class="form-group">
                                                 <label for="file" class="text-danger fw-bold">
@@ -195,8 +192,7 @@
                                     </div>
                                     <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapseDeliveryInfo" class="collapse show" aria-labelledby="headingDeliveryInfo"
-                                    data-bs-parent="#accordioncCheckoutInfo" data-parent="#accordioncCheckoutInfo">
+                                <div id="collapseDeliveryInfo" class="collapse show" aria-labelledby="headingDeliveryInfo">
                                     <div class="card-body p-3 p-md-4" id="delivery_info">
                                         @include('frontend.partials.cart.delivery_info', [
                                             'carts' => $carts,
@@ -223,13 +219,12 @@
                                     </div>
                                     <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapsePaymentInfo" class="collapse show" aria-labelledby="headingPaymentInfo"
-                                    data-bs-parent="#accordioncCheckoutInfo" data-parent="#accordioncCheckoutInfo">
+                                <div id="collapsePaymentInfo" class="collapse show" aria-labelledby="headingPaymentInfo">
                                     <div class="card-body p-3 p-md-4" id="payment_info">
                                         @include('frontend.partials.cart.payment_info', [
                                             'carts' => $carts,
                                             'total' => $total,
-                                        ])                         ])
+                                        ])
 
                                         <!-- Agree Box -->
                                         <div class="pt-2rem fs-14">
