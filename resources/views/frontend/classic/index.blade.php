@@ -86,32 +86,68 @@
                 تسوق معدات مطاعم ومقاهي بأفضل الأسعار
             </h2>
 
-            <x-carousel :options="[
-                'slidesPerView' => 2.5,
-                'spaceBetween' => 16,
-                'breakpoints' => [
-                    '480' => ['slidesPerView' => 3.5, 'spaceBetween' => 16],
-                    '640' => ['slidesPerView' => 4.5, 'spaceBetween' => 18],
-                    '768' => ['slidesPerView' => 5.5, 'spaceBetween' => 20],
-                    '1024' => ['slidesPerView' => 7, 'spaceBetween' => 20],
-                ],
-            ]">
-                @foreach ($main_categories as $category)
-                    <div class="swiper-slide">
-                        <a href="{{ route('products.category', $category->slug) }}" class="category-pedestal-card">
-                            <div class="category-pedestal-base mb-3">
-                                <img src="{{ $category->bannerImage ? my_asset($category->bannerImage->file_name) : ($category->icon ? uploaded_asset($category->icon) : static_asset('assets/img/placeholder.jpg')) }}"
-                                    class="max-h-full max-w-full object-contain drop-shadow-md transition duration-300"
-                                    alt="{{ $category->getTranslation('name') }}"
-                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+            {{-- Responsive Grid: On mobile/tablet horizontal scroll, on desktop elegant 7-column grid --}}
+            <div class="flex items-start gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar md:grid md:grid-cols-4 lg:grid-cols-7 md:gap-4 lg:gap-6 justify-start md:justify-center">
+                @foreach ($main_categories->take(7) as $category)
+                    @php
+                        $catImg = null;
+                        if ($category->icon) {
+                            $catImg = uploaded_asset($category->icon);
+                        } elseif ($category->cover_image) {
+                            $catImg = uploaded_asset($category->cover_image);
+                        } elseif ($category->banner) {
+                            $catImg = uploaded_asset($category->banner);
+                        }
+                        if (!$catImg && $category->bannerImage) {
+                            $catImg = my_asset($category->bannerImage->file_name);
+                        }
+                        if (!$catImg) {
+                            $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
+                            if ($firstProd) {
+                                $catImg = uploaded_asset($firstProd->thumbnail_img);
+                            }
+                        }
+
+                        // Icon fallback based on category keywords
+                        $nameLower = mb_strtolower($category->name);
+                        $defaultIcon = 'fa-solid fa-kitchen-set';
+                        if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
+                            $defaultIcon = 'fa-solid fa-snowflake';
+                        } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
+                            $defaultIcon = 'fa-solid fa-fire-burner';
+                        } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
+                            $defaultIcon = 'fa-solid fa-mug-hot';
+                        } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
+                            $defaultIcon = 'fa-solid fa-wheat-awn';
+                        } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
+                            $defaultIcon = 'fa-solid fa-table';
+                        }
+                    @endphp
+
+                    <div class="flex-shrink-0 w-24 sm:w-28 md:w-auto">
+                        <a href="{{ route('products.category', $category->slug) }}" class="category-pedestal-card group">
+                            <div class="category-pedestal-base mb-3 flex items-center justify-center">
+                                @if ($catImg)
+                                    <img src="{{ $catImg }}"
+                                        class="max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition duration-300 group-hover:scale-110"
+                                        alt="{{ $category->getTranslation('name') }}"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="hidden size-full items-center justify-center text-white text-3xl">
+                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
+                                    </div>
+                                @else
+                                    <div class="flex size-full items-center justify-center text-white text-3xl">
+                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
+                                    </div>
+                                @endif
                             </div>
-                            <p class="line-clamp-2 text-xs sm:text-sm font-bold text-neutral-800 transition hover:text-[#4868e6]">
+                            <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight text-center">
                                 {{ $category->getTranslation('name') }}
                             </p>
                         </a>
                     </div>
                 @endforeach
-            </x-carousel>
+            </div>
         </section>
     @endif
 
