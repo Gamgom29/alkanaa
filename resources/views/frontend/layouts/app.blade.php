@@ -60,29 +60,71 @@
     <link rel="icon" href="{{ $site_icon }}">
     <link rel="apple-touch-icon" href="{{ $site_icon }}">
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <style>
-        body, h1, h2, h3, h4, h5, h6, p, a, span, div, button, input, textarea, select, li {
-            font-family: 'IBM Plex Sans Arabic', sans-serif !important;
-        }
-    </style>
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-    {{-- @if ($rtl == 1)
-        <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
-    @endif --}}
-    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000, 9999) }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
     <script src="https://kit.fontawesome.com/cbcafb1e3c.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/front_css/index.css') }}">
 
-    
+    {{--
+        Legacy theme (AIZ/Bootstrap 4 + a Bootstrap 5 front_css layer) is
+        loaded into a named cascade layer, `legacy`, via @import inside this
+        <style> block — <link> has no `layer` attribute, and these files
+        live only on the server (excluded from the repo by .gitignore), so
+        an in-page @import is the only way to place them in a layer without
+        reading their contents.
+
+        CSS layer priority is decided by the ORDER layer names are first
+        seen across the whole document, not by selector specificity. This
+        block appears before @vite() below, so `legacy` is registered
+        first (lowest priority) and every layer Tailwind registers
+        afterward (theme/utilities) outranks it unconditionally — even
+        against Bootstrap's `!important` utilities like `.bg-primary`.
+        Do not move @vite() above this block.
+
+        Cascade layers need Chrome 99 / Safari 15.4 / Firefox 97 (~iOS
+        15.4+). Older browsers silently drop `@import ... layer()`
+        entirely, which would leave the legacy theme completely unloaded —
+        the inline script below detects that and falls back to plain
+        <link> tags.
+    --}}
+    <link rel="preload" as="style" href="{{ static_asset('assets/css/vendors.css') }}">
+    <link rel="preload" as="style" href="{{ static_asset('assets/css/aiz-core.css') }}">
+    <link rel="preload" as="style" href="{{ static_asset('assets/css/custom-style.css') }}">
+    <link rel="preload" as="style" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
+    <link rel="preload" as="style" href="{{ static_asset('assets/front_css/index.css') }}">
+    <style>
+        @layer legacy;
+        @import url("{{ static_asset('assets/css/vendors.css') }}") layer(legacy);
+        @import url("{{ static_asset('assets/css/aiz-core.css') }}?v={{ rand(1000, 9999) }}") layer(legacy);
+        @import url("{{ static_asset('assets/css/custom-style.css') }}") layer(legacy);
+        @import url("{{ static_asset('assets/front_css/bootstrap.css') }}") layer(legacy);
+        @import url("{{ static_asset('assets/front_css/index.css') }}") layer(legacy);
+    </style>
+    <script>
+        // Cascade layers unsupported (pre-Chrome 99 / Safari 15.4 / Firefox 97):
+        // the @import ... layer() rules above are silently discarded, so the
+        // legacy theme never loads. Re-add it as plain, unlayered <link> tags.
+        if (!('CSSLayerBlockRule' in window)) {
+            @php
+                $legacyStylesheets = [
+                    static_asset('assets/css/vendors.css'),
+                    static_asset('assets/css/aiz-core.css') . '?v=' . rand(1000, 9999),
+                    static_asset('assets/css/custom-style.css'),
+                    static_asset('assets/front_css/bootstrap.css'),
+                    static_asset('assets/front_css/index.css'),
+                ];
+            @endphp
+            @json($legacyStylesheets).forEach(function (href) {
+                var l = document.createElement('link');
+                l.rel = 'stylesheet';
+                l.href = href;
+                document.head.appendChild(l);
+            });
+        }
+    </script>
+
+    {{-- New design system: tokens, IBM Plex Sans Arabic, and (on this
+        legacy shell) Tailwind utilities without Preflight, so the base
+        element reset never fights the styles above. --}}
+    @vite(['resources/css/storefront-compat.css'])
+
     <script>
         var AIZ = AIZ || {};
         AIZ.local = {
@@ -966,6 +1008,7 @@ echo get_setting('footer_script'); @endphp
 <!-- Popper & Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+@vite(['resources/js/storefront.js'])
 
 @yield('script')
 </body>

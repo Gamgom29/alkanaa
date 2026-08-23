@@ -1,0 +1,26 @@
+{
+  "resources/css/storefront-compat.css": {
+    "file": "assets/storefront-compat-0F8cCygK.css",
+    "name": "storefront-compat",
+    "names": [
+      "storefront-compat.css"
+    ],
+    "src": "resources/css/storefront-compat.css",
+    "isEntry": true
+  },
+  "resources/css/storefront.css": {
+    "file": "assets/storefront-C1IiSvZz.css",
+    "name": "storefront",
+    "names": [
+      "storefront.css"
+    ],
+    "src": "resources/css/storefront.css",
+    "isEntry": true
+  },
+  "resources/js/storefront.js": {
+    "file": "assets/storefront-DTbTTfnw.js",
+    "name": "storefront",
+    "src": "resources/js/storefront.js",
+    "isEntry": true
+  }
+}

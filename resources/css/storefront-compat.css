@@ -1,0 +1,24 @@
+/*
+ * Entry point for pages still on the legacy shell
+ * (@extends('frontend.layouts.app')) that need a Tailwind utility or two
+ * without a full page conversion. Deliberately omits Preflight — the file
+ * only imports Tailwind's theme + utilities layers, skipping
+ * tailwindcss/preflight.css — so it does not reset Bootstrap/AIZ's base
+ * element styles on the ~165 pages that still depend on them.
+ *
+ * Cascade-layer note: layouts/app.blade.php registers a `legacy` layer
+ * (wrapping the AIZ/Bootstrap <link> stylesheets) in an inline <style>
+ * block that appears in <head> BEFORE this stylesheet is linked. CSS layer
+ * priority is decided by the order layer names are first seen in the
+ * document, not by specificity — so as long as that ordering holds,
+ * `theme`/`utilities` below are registered after `legacy` and therefore
+ * outrank it unconditionally. If this file is ever loaded before that
+ * <style> block, the ordering — and every utility class on hybrid pages —
+ * breaks silently. Do not reorder the <head>.
+ */
+@import "./fonts.css";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./theme.css";
+
+@source "../views";

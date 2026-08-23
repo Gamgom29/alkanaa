@@ -1,0 +1,6 @@
+/*
+ * Single font family for the whole storefront, replacing the previous
+ * render-blocking four-family Google Fonts request (Cairo + Open Sans +
+ * Roboto + IBM Plex Sans Arabic) that layouts/app.blade.php was loading.
+ */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
