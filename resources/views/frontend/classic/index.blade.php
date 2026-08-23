@@ -26,222 +26,168 @@
         }
     @endphp
 
-    {{-- 1. Hero Promo Banner (Matching Mobile & Desktop Screenshots) --}}
+    {{-- 1. Hero Promo Slider (Touch-Swipeable, Autoplay, Zero Arrow Buttons) --}}
     <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-4 sm:pb-6">
-        <!-- Desktop Slider / Banner -->
-        <div class="hidden sm:block">
-            @if ($localizedSliders->count() > 0)
-                <div class="overflow-hidden rounded-2xl shadow-xs">
-                    <x-carousel :options="['loop' => $localizedSliders->count() > 1, 'autoplay' => $localizedSliders->count() > 1 ? ['delay' => 5000] : false]">
-                        @foreach ($localizedSliders as $key => $slider)
-                            <div class="swiper-slide">
-                                <a href="{{ $sliderLinks[$key] ?? '#' }}" class="block">
-                                    <img src="{{ static_asset($slider->file_name) }}"
-                                        class="h-60 sm:h-80 lg:h-[380px] w-full rounded-2xl object-cover"
-                                        alt="{{ get_setting('website_name') }}"
-                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/front_img/sa-summer-product.jpeg') }}';">
-                                </a>
-                            </div>
-                        @endforeach
-                    </x-carousel>
-                </div>
-            @else
-                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#d8eaf8] via-[#e6f2fc] to-[#bde0f8] p-6 sm:p-10 shadow-xs">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                        <div class="lg:col-span-6 text-start z-10">
-                            <span class="inline-block rounded-full bg-[#4868e6]/15 text-[#4868e6] px-3.5 py-1 text-xs font-extrabold mb-3">
-                                موسم الصيف
-                            </span>
-                            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0c234a] leading-tight mb-2">
-                                ثلاجات عرض عامودية
-                            </h1>
-                            <p class="text-sm sm:text-base font-semibold text-neutral-600 mb-6">
-                                استعد للصيف بأقوى المعدات التجارية
-                            </p>
-                            <a href="{{ route('search') }}" class="yellow-cta-btn text-sm sm:text-base px-8 py-2.5 no-underline">
-                                تسوق الآن
+        <div class="overflow-hidden rounded-2xl shadow-xs">
+            <x-carousel :pagination="true" :arrows="false" :options="[
+                'loop' => true,
+                'autoplay' => ['delay' => 4500, 'disableOnInteraction' => false],
+                'speed' => 600,
+            ]">
+                @if ($localizedSliders->count() > 0)
+                    @foreach ($localizedSliders as $key => $slider)
+                        <div class="swiper-slide">
+                            <a href="{{ $sliderLinks[$key] ?? '#' }}" class="block">
+                                <img src="{{ static_asset($slider->file_name) }}"
+                                    class="h-44 sm:h-72 lg:h-[360px] w-full object-cover rounded-2xl"
+                                    alt="{{ get_setting('website_name') }}"
+                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/front_img/sa-summer-product.jpeg') }}';">
                             </a>
                         </div>
-                        <div class="lg:col-span-6 relative flex items-center justify-center">
-                            <span class="absolute top-0 start-4 sm:start-10 z-10 flex size-14 sm:size-18 flex-col items-center justify-center rounded-full bg-[#4868e6] text-white shadow-md text-center p-1">
-                                <span class="text-[10px] sm:text-xs font-bold leading-none">خصم حتى</span>
-                                <span class="text-sm sm:text-lg font-black leading-none mt-0.5">15%</span>
-                            </span>
-                            <img src="{{ static_asset('assets/front_img/sa-summer-product.jpeg') }}"
-                                class="h-56 sm:h-72 lg:h-80 w-full object-contain rounded-xl drop-shadow-md"
-                                alt="Summer Promo"
-                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
+                    @endforeach
+                @else
+                    <!-- Slide 1: ثلاجات عرض عامودية -->
+                    <div class="swiper-slide">
+                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#d8eaf8] via-[#e8f3fc] to-[#bce0f8] p-4 sm:p-8 min-h-[175px] sm:min-h-[260px] flex items-center justify-between">
+                            <div class="w-1/2 relative flex items-center justify-center">
+                                <span class="absolute -top-2 start-2 z-10 flex size-9 sm:size-14 flex-col items-center justify-center rounded-full bg-[#4868e6] text-white shadow-xs text-center p-0.5">
+                                    <span class="text-[7px] sm:text-[10px] font-bold leading-none">خصم حتى</span>
+                                    <span class="text-[10px] sm:text-base font-black leading-none mt-0.5">15%</span>
+                                </span>
+                                <img src="{{ static_asset('assets/front_img/sa-summer-product.jpeg') }}"
+                                    class="h-28 sm:h-52 w-full object-contain drop-shadow-md"
+                                    alt="ثلاجات عرض عامودية">
+                            </div>
+                            <div class="w-1/2 text-end z-10 flex flex-col items-end ps-2">
+                                <span class="rounded-full bg-[#4868e6]/15 text-[#4868e6] px-2.5 py-0.5 text-[9px] sm:text-xs font-extrabold mb-1">
+                                    موسم الصيف
+                                </span>
+                                <h2 class="text-sm sm:text-3xl font-black text-[#0c234a] leading-tight mb-1 sm:mb-2">
+                                    ثلاجات عرض عامودية
+                                </h2>
+                                <p class="text-[10px] sm:text-sm font-semibold text-neutral-600 mb-2 sm:mb-4">
+                                    استعد للصيف بأقوى المعدات التجارية
+                                </p>
+                                <a href="{{ route('search') }}" class="yellow-cta-btn text-[10px] sm:text-xs px-3 sm:px-6 py-1 sm:py-2 no-underline">
+                                    تسوق الآن
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
-        </div>
 
-        <!-- Mobile Dedicated Hero Banner (Exact Mobile Mockup Layout) -->
-        <div class="sm:hidden relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#d8eaf8] via-[#e8f3fc] to-[#bce0f8] p-4 shadow-2xs">
-            <div class="flex items-center justify-between gap-2">
-                <!-- Coolers image + discount badge -->
-                <div class="w-1/2 relative flex items-center justify-center">
-                    <span class="absolute -top-1.5 start-0 z-10 flex size-10 flex-col items-center justify-center rounded-full bg-[#4868e6] text-white shadow-xs text-center p-0.5">
-                        <span class="text-[7px] font-bold leading-none">خصم حتى</span>
-                        <span class="text-[11px] font-black leading-none mt-0.5">15%</span>
-                    </span>
-                    <img src="{{ static_asset('assets/front_img/sa-summer-product.jpeg') }}"
-                        class="h-28 w-full object-contain drop-shadow-sm"
-                        alt="Summer Promo"
-                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
-                </div>
-
-                <!-- Text & Yellow Button -->
-                <div class="w-1/2 text-end z-10 flex flex-col items-end">
-                    <span class="text-[9px] font-bold text-[#4868e6] mb-1">
-                        موسم الصيف
-                    </span>
-                    <h2 class="text-sm font-black text-[#0c234a] leading-tight mb-1">
-                        ثلاجات عرض عامودية
-                    </h2>
-                    <p class="text-[10px] font-medium text-neutral-500 mb-2.5">
-                        استعد للصيف بأقوى المعدات
-                    </p>
-                    <a href="{{ route('search') }}" class="yellow-cta-btn text-[10px] px-3.5 py-1 no-underline font-bold">
-                        تسوق الآن
-                    </a>
-                </div>
-            </div>
+                    <!-- Slide 2: حلول التبريد ومكائن الآيس كريم -->
+                    <div class="swiper-slide">
+                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#d0e6f9] via-[#e2f0fc] to-[#b4daf6] p-4 sm:p-8 min-h-[175px] sm:min-h-[260px] flex items-center justify-between">
+                            <div class="w-1/2 relative flex items-center justify-center">
+                                <span class="absolute -top-2 start-2 z-10 flex size-9 sm:size-14 flex-col items-center justify-center rounded-full bg-[#4868e6] text-white shadow-xs text-center p-0.5">
+                                    <span class="text-[7px] sm:text-[10px] font-bold leading-none">خصم حتى</span>
+                                    <span class="text-[10px] sm:text-base font-black leading-none mt-0.5">20%</span>
+                                </span>
+                                <img src="{{ static_asset('assets/front_img/sa-summer-product2.jpeg') }}"
+                                    class="h-28 sm:h-52 w-full object-contain drop-shadow-md"
+                                    alt="معدات التبريد">
+                            </div>
+                            <div class="w-1/2 text-end z-10 flex flex-col items-end ps-2">
+                                <span class="rounded-full bg-[#4868e6]/15 text-[#4868e6] px-2.5 py-0.5 text-[9px] sm:text-xs font-extrabold mb-1">
+                                    عروض حصرية
+                                </span>
+                                <h2 class="text-sm sm:text-3xl font-black text-[#0c234a] leading-tight mb-1 sm:mb-2">
+                                    مكائن آيس كريم ومشروبات
+                                </h2>
+                                <p class="text-[10px] sm:text-sm font-semibold text-neutral-600 mb-2 sm:mb-4">
+                                    أحدث التقنيات وأفضل الأسعار لمتجرك
+                                </p>
+                                <a href="{{ route('search') }}" class="yellow-cta-btn text-[10px] sm:text-xs px-3 sm:px-6 py-1 sm:py-2 no-underline">
+                                    تسوق الآن
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </x-carousel>
         </div>
     </section>
 
-    {{-- 2. Categories Section: "تسوق معدات مطاعم ومقاهي بأفضل الأسعار" (Matching Mobile & Desktop Screenshots) --}}
+    {{-- 2. Categories Section: "تسوق معدات مطاعم ومقاهي بأفضل الأسعار" (Touch-Swipeable, Zero Arrow Buttons) --}}
     @if ($main_categories->count() > 0)
         <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
             <h2 class="mb-5 sm:mb-8 text-center text-lg sm:text-2xl font-black text-[#0c234a]">
                 تسوق معدات مطاعم ومقاهي بأفضل الأسعار
             </h2>
 
-            <!-- Desktop View: 7 Columns Grid -->
-            <div class="hidden lg:grid lg:grid-cols-7 gap-4 lg:gap-6 justify-center">
-                @foreach ($main_categories->take(7) as $category)
-                    @php
-                        $catImg = null;
-                        if ($category->icon) {
-                            $catImg = uploaded_asset($category->icon);
-                        } elseif ($category->cover_image) {
-                            $catImg = uploaded_asset($category->cover_image);
-                        } elseif ($category->banner) {
-                            $catImg = uploaded_asset($category->banner);
-                        }
-                        if (!$catImg && $category->bannerImage) {
-                            $catImg = my_asset($category->bannerImage->file_name);
-                        }
-                        if (!$catImg) {
-                            $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
-                            if ($firstProd) {
-                                $catImg = uploaded_asset($firstProd->thumbnail_img);
+            <div class="w-full">
+                <x-carousel :arrows="false" :options="[
+                    'slidesPerView' => 2.3,
+                    'spaceBetween' => 12,
+                    'grabCursor' => true,
+                    'breakpoints' => [
+                        '480' => ['slidesPerView' => 2.6, 'spaceBetween' => 14],
+                        '640' => ['slidesPerView' => 3.6, 'spaceBetween' => 16],
+                        '768' => ['slidesPerView' => 4.6, 'spaceBetween' => 16],
+                        '1024' => ['slidesPerView' => 7, 'spaceBetween' => 16],
+                    ],
+                ]">
+                    @foreach ($main_categories as $category)
+                        @php
+                            $catImg = null;
+                            if ($category->icon) {
+                                $catImg = uploaded_asset($category->icon);
+                            } elseif ($category->cover_image) {
+                                $catImg = uploaded_asset($category->cover_image);
+                            } elseif ($category->banner) {
+                                $catImg = uploaded_asset($category->banner);
                             }
-                        }
-
-                        $nameLower = mb_strtolower($category->name);
-                        $defaultIcon = 'fa-solid fa-kitchen-set';
-                        if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
-                            $defaultIcon = 'fa-solid fa-snowflake';
-                        } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
-                            $defaultIcon = 'fa-solid fa-fire-burner';
-                        } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
-                            $defaultIcon = 'fa-solid fa-mug-hot';
-                        } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
-                            $defaultIcon = 'fa-solid fa-wheat-awn';
-                        } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
-                            $defaultIcon = 'fa-solid fa-table';
-                        }
-                    @endphp
-
-                    <div class="flex flex-col items-center">
-                        <a href="{{ route('products.category', $category->slug) }}" class="category-pedestal-card group w-full">
-                            <div class="category-pedestal-base mb-3 flex items-center justify-center">
-                                @if ($catImg)
-                                    <img src="{{ $catImg }}"
-                                        class="max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition duration-300 group-hover:scale-110"
-                                        alt="{{ $category->getTranslation('name') }}"
-                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                    <div class="hidden size-full items-center justify-center text-white text-3xl">
-                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                    </div>
-                                @else
-                                    <div class="flex size-full items-center justify-center text-white text-3xl">
-                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                    </div>
-                                @endif
-                            </div>
-                            <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight text-center">
-                                {{ $category->getTranslation('name') }}
-                            </p>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-
-            <!-- Mobile & Tablet View: Pure CSS 2-Column Touch Slider (Zero Lag, Perfectly Centered Pedestals) -->
-            <div class="lg:hidden flex gap-3 overflow-x-auto no-scrollbar pb-3 pt-1 px-1 snap-x snap-mandatory">
-                @foreach ($main_categories as $category)
-                    @php
-                        $catImg = null;
-                        if ($category->icon) {
-                            $catImg = uploaded_asset($category->icon);
-                        } elseif ($category->cover_image) {
-                            $catImg = uploaded_asset($category->cover_image);
-                        } elseif ($category->banner) {
-                            $catImg = uploaded_asset($category->banner);
-                        }
-                        if (!$catImg && $category->bannerImage) {
-                            $catImg = my_asset($category->bannerImage->file_name);
-                        }
-                        if (!$catImg) {
-                            $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
-                            if ($firstProd) {
-                                $catImg = uploaded_asset($firstProd->thumbnail_img);
+                            if (!$catImg && $category->bannerImage) {
+                                $catImg = my_asset($category->bannerImage->file_name);
                             }
-                        }
+                            if (!$catImg) {
+                                $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
+                                if ($firstProd) {
+                                    $catImg = uploaded_asset($firstProd->thumbnail_img);
+                                }
+                            }
 
-                        $nameLower = mb_strtolower($category->name);
-                        $defaultIcon = 'fa-solid fa-kitchen-set';
-                        if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
-                            $defaultIcon = 'fa-solid fa-snowflake';
-                        } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
-                            $defaultIcon = 'fa-solid fa-fire-burner';
-                        } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
-                            $defaultIcon = 'fa-solid fa-mug-hot';
-                        } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
-                            $defaultIcon = 'fa-solid fa-wheat-awn';
-                        } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
-                            $defaultIcon = 'fa-solid fa-table';
-                        }
-                    @endphp
+                            $nameLower = mb_strtolower($category->name);
+                            $defaultIcon = 'fa-solid fa-kitchen-set';
+                            if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
+                                $defaultIcon = 'fa-solid fa-snowflake';
+                            } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
+                                $defaultIcon = 'fa-solid fa-fire-burner';
+                            } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
+                                $defaultIcon = 'fa-solid fa-mug-hot';
+                            } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
+                                $defaultIcon = 'fa-solid fa-wheat-awn';
+                            } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
+                                $defaultIcon = 'fa-solid fa-table';
+                            }
+                        @endphp
 
-                    <div class="flex-shrink-0 snap-start" style="width: calc(50% - 6px);">
-                        <a href="{{ route('products.category', $category->slug) }}" class="flex flex-col items-center text-center no-underline group p-1">
-                            <!-- Blue Pedestal with Centered Image/Icon -->
-                            <div class="relative w-full max-w-[130px] aspect-[4/3] rounded-2xl bg-gradient-to-b from-[#5c7ef8] to-[#4868e6] shadow-sm flex items-center justify-center p-3 mx-auto transition duration-200 group-hover:scale-105">
-                                @if ($catImg)
-                                    <img src="{{ $catImg }}"
-                                        class="max-h-full max-w-full object-contain drop-shadow-md transition duration-200 group-hover:scale-110"
-                                        alt="{{ $category->getTranslation('name') }}"
-                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                    <div class="hidden size-full items-center justify-center text-white text-3xl">
-                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                    </div>
-                                @else
-                                    <div class="flex size-full items-center justify-center text-white text-3xl">
-                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                    </div>
-                                @endif
-                            </div>
-                            <!-- Category Title -->
-                            <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight mt-2 text-center line-clamp-2 px-1">
-                                {{ $category->getTranslation('name') }}
-                            </p>
-                        </a>
-                    </div>
-                @endforeach
+                        <div class="swiper-slide">
+                            <a href="{{ route('products.category', $category->slug) }}" class="flex flex-col items-center text-center no-underline group py-1">
+                                <!-- Blue Pedestal with Centered Image -->
+                                <div class="size-24 sm:size-28 rounded-2xl bg-gradient-to-b from-[#5c7ef8] to-[#4868e6] shadow-sm flex items-center justify-center p-3 mx-auto transition duration-200 group-hover:scale-105">
+                                    @if ($catImg)
+                                        <img src="{{ $catImg }}"
+                                            class="max-h-[85%] max-w-[85%] object-contain drop-shadow-md transition duration-200 group-hover:scale-110"
+                                            alt="{{ $category->getTranslation('name') }}"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="hidden size-full items-center justify-center text-white text-3xl">
+                                            <i class="{{ $defaultIcon }} drop-shadow-md"></i>
+                                        </div>
+                                    @else
+                                        <div class="flex size-full items-center justify-center text-white text-3xl">
+                                            <i class="{{ $defaultIcon }} drop-shadow-md"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                                <!-- Category Title -->
+                                <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight mt-2 text-center line-clamp-2 px-1">
+                                    {{ $category->getTranslation('name') }}
+                                </p>
+                            </a>
+                        </div>
+                    @endforeach
+                </x-carousel>
             </div>
         </section>
     @endif

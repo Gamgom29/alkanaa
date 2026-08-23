@@ -1,29 +1,37 @@
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
 import Swiper from 'swiper';
-import { Navigation, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 Alpine.plugin(collapse);
 
-// Swiper auto-detects RTL from the container's `dir` attribute (inherited
-// from <html dir="rtl">), so no manual RTL branching is needed here — this
-// replaces three separate hand-rolled, mutually inconsistent slider
-// implementations that used to live inline in classic/index.blade.php.
+// Swiper component for Alpine.js with touch-swipe, autoplay & optional pagination/navigation
 Alpine.data('carousel', (options = {}) => ({
     swiper: null,
     init() {
-        this.swiper = new Swiper(this.$refs.swiper, {
-            modules: [Navigation, Autoplay],
+        const config = {
+            modules: [Navigation, Autoplay, Pagination],
             slidesPerView: 1,
             spaceBetween: 12,
-            navigation: {
+            grabCursor: true,
+            pagination: this.$refs.pagination ? {
+                el: this.$refs.pagination,
+                clickable: true,
+            } : false,
+            ...options,
+        };
+
+        if (this.$refs.prev && this.$refs.next) {
+            config.navigation = {
                 prevEl: this.$refs.prev,
                 nextEl: this.$refs.next,
-            },
-            ...options,
-        });
+            };
+        }
+
+        this.swiper = new Swiper(this.$refs.swiper, config);
     },
     destroy() {
         this.swiper?.destroy();
@@ -34,11 +42,7 @@ window.Alpine = Alpine;
 Alpine.start();
 
 /*
- * Quick add-to-cart + mini-cart toast, extracted from being duplicated
- * inline in classic/index.blade.php so every converted page can share it.
- * Requires jQuery (loaded globally via assets/js/vendors.js on the legacy
- * shell) and the .mini-cart-toast markup from
- * frontend.partials.cart.cart_summary_toast.
+ * Quick add-to-cart + mini-cart toast
  */
 window.mountMiniCartToastNearCart = function (html) {
     const $ = window.jQuery;
@@ -117,36 +121,50 @@ document.addEventListener('DOMContentLoaded', function () {
     const $ = window.jQuery;
     if (!$) return;
 
-    $(document).on('click', '.mct-close', function () {
-        $(this).closest('.mini-cart-toast').remove();
-    });
-
     $(document).on('click', '.add-to-cart-btn', function (e) {
         e.preventDefault();
         const $btn = $(this);
-        const id = $btn.data('id');
+        const productId = $btn.data('id');
+        if (!productId || $btn.prop('disabled')) return;
+
+        $btn.prop('disabled', true);
         const originalHtml = $btn.html();
+        $btn.html('<i class="fa-solid fa-spinner fa-spin"></i>');
 
-        $btn.addClass('is-loading').prop('disabled', true)
-            .html('<span class="btn-spinner" aria-hidden="true"></span>');
-
-        $.post(window.AIZ?.routes?.addToCart, {
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            id: id,
-            quantity: 1,
-        }).done(function (res) {
-            if (typeof res.cart_count !== 'undefined') {
-                $('.cart-count-span').text(res.cart_count);
-            }
-            if (res.modal_view) {
-                window.mountMiniCartToastNearCart(res.modal_view);
-            } else if (res.status != 1) {
-                alert(res.message || 'تعذر الإضافة');
-            }
-        }).fail(function () {
-            alert('تعذر الاتصال بالسيرفر');
-        }).always(function () {
-            $btn.removeClass('is-loading').prop('disabled', false).html(originalHtml);
+        $.ajax({
+            type: 'POST',
+            url: (window.AIZ && window.AIZ.routes && window.AIZ.routes.addToCart) || '/cart/addtocart',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: productId,
+                quantity: 1,
+            },
+            success: function (data) {
+                if (data.status === 1 || data.status === true || data.modal_view) {
+                    if (data.modal_view) {
+                        window.mountMiniCartToastNearCart(data.modal_view);
+                    }
+                    if (typeof updateNavCart === 'function') {
+                        updateNavCart(data.nav_cart_view, data.cart_count);
+                    } else if (data.cart_count !== undefined) {
+                        $('.cart-count-span').text(data.cart_count);
+                    }
+                } else if (data.message) {
+                    if (window.AIZ && window.AIZ.plugins && window.AIZ.plugins.notify) {
+                        AIZ.plugins.notify('danger', data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            },
+            error: function () {
+                if (window.AIZ && window.AIZ.plugins && window.AIZ.plugins.notify) {
+                    AIZ.plugins.notify('danger', 'Error adding to cart');
+                }
+            },
+            complete: function () {
+                $btn.prop('disabled', false).html(originalHtml);
+            },
         });
     });
 });

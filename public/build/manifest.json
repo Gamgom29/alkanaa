@@ -1,6 +1,6 @@
 {
   "resources/css/storefront-compat.css": {
-    "file": "assets/storefront-compat-DoUhWrx3.css",
+    "file": "assets/storefront-compat-t2XW5kP7.css",
     "name": "storefront-compat",
     "names": [
       "storefront-compat.css"
@@ -9,7 +9,7 @@
     "isEntry": true
   },
   "resources/css/storefront.css": {
-    "file": "assets/storefront-4hkHG3m3.css",
+    "file": "assets/storefront-C2Ij5gkd.css",
     "name": "storefront",
     "names": [
       "storefront.css"
@@ -18,12 +18,12 @@
     "isEntry": true
   },
   "resources/js/storefront.js": {
-    "file": "assets/storefront-Bb7eBF1t.js",
+    "file": "assets/storefront-Bzp3AJz-.js",
     "name": "storefront",
     "src": "resources/js/storefront.js",
     "isEntry": true,
     "css": [
-      "assets/storefront-BgJ4idxy.css"
+      "assets/storefront-DjMxu4j7.css"
     ]
   }
 }
