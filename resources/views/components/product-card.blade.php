@@ -15,7 +15,7 @@
     <!-- Top Badges & Wishlist -->
     <div class="flex items-center justify-between mb-1">
         @if ($hasDiscount)
-            <span class="rounded-full bg-pink-100 px-2 py-0.5 text-[11px] font-bold text-rose-600">
+            <span class="rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[11px] font-extrabold text-rose-600">
                 -{{ round($product->discount) }}%
             </span>
         @else
@@ -24,7 +24,8 @@
 
         <button type="button" onclick="addToWishList({{ $product->id }})"
             aria-label="{{ translate('Add to wishlist') }}"
-            class="flex size-7 items-center justify-center rounded-full text-neutral-400 transition hover:bg-neutral-100 hover:text-rose-500">
+            class="wishlist-heart-btn flex size-8 items-center justify-center rounded-full bg-neutral-50 text-neutral-400 transition hover:bg-rose-50 hover:text-rose-500 border-0 outline-none"
+            style="border: none !important; outline: none !important; background: #f8fafc;">
             <i class="fa-regular fa-heart text-sm"></i>
         </button>
     </div>
@@ -38,10 +39,10 @@
 
     <!-- Badges Row -->
     <div class="mt-2 flex flex-wrap items-center gap-1.5">
-        <span class="rounded bg-[#fef08a] px-1.5 py-0.5 text-[10px] font-bold text-[#854d0e]">
+        <span class="rounded-md bg-[#fef08a] px-1.5 py-0.5 text-[10px] font-bold text-[#854d0e]">
             {{ translate('Free Shipping') ?? 'شحن مجاني' }}
         </span>
-        <span class="rounded {{ $inStock ? 'bg-[#dcfce7] text-[#166534]' : 'bg-red-100 text-red-700' }} px-1.5 py-0.5 text-[10px] font-bold">
+        <span class="rounded-md {{ $inStock ? 'bg-[#dcfce7] text-[#166534]' : 'bg-red-50 text-red-700 border border-red-200' }} px-1.5 py-0.5 text-[10px] font-bold">
             {{ $inStock ? '✔ ' . translate('Available') : translate('Out of stock') }}
         </span>
         @if ($sku)
@@ -63,7 +64,8 @@
         <!-- Add to cart button (Royal Blue) -->
         <button type="button" @if (!$inStock) disabled @endif data-id="{{ $product->id }}"
             title="{{ translate('Add to Cart') }}"
-            class="add-to-cart-btn flex size-9 sm:size-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#4868e6] text-white shadow-xs transition hover:bg-[#3753c8] active:scale-95 disabled:cursor-not-allowed disabled:bg-neutral-300">
+            class="add-to-cart-btn flex size-9 sm:size-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#4868e6] text-white shadow-xs transition hover:bg-[#3753c8] active:scale-95 disabled:cursor-not-allowed disabled:bg-neutral-300"
+            style="border: none !important; outline: none !important;">
             <i class="fa-solid fa-cart-shopping text-xs sm:text-sm"></i>
         </button>
 
