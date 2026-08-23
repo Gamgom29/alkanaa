@@ -305,7 +305,7 @@
                                                 </div>
                                             @endforeach --}}
 
-                                            @foreach ($categories->where('featured', 1) as $category)
+                                            @foreach (collect($categories)->where('featured', 1) as $category)
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="heading-{{ $category->id }}">
                                                         <button
