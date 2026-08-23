@@ -100,7 +100,7 @@
     function get_states(country_id) {
         if (!country_id) return;
         $('select[name="state_id"]').html('<option value="">{{ translate("Loading...") }}</option>');
-        $.post('{{ route("get_state") }}', {
+        $.post('{{ route("get-state") }}', {
             _token: '{{ csrf_token() }}',
             country_id: country_id
         }, function(data) {
@@ -116,7 +116,7 @@
     function get_cities(state_id) {
         if (!state_id) return;
         $('select[name="city_id"]').html('<option value="">{{ translate("Loading...") }}</option>');
-        $.post('{{ route("get_city") }}', {
+        $.post('{{ route("get-city") }}', {
             _token: '{{ csrf_token() }}',
             state_id: state_id
         }, function(data) {
