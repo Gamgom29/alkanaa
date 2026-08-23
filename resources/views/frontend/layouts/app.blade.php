@@ -64,8 +64,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <style>
+        body, h1, h2, h3, h4, h5, h6, p, a, span, div, button, input, textarea, select, li {
+            font-family: 'IBM Plex Sans Arabic', sans-serif !important;
+        }
+    </style>
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
     {{-- @if ($rtl == 1)

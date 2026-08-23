@@ -353,17 +353,22 @@
             }
 
             .category-slider {
-                gap: 14px;
+                gap: 12px;
                 padding: 0 6px;
             }
 
+            .category-slider .slider-item {
+                width: 84px;
+                max-width: 84px;
+            }
+
             .category-slider .slider-item img {
-                width: 64px;
-                height: 64px;
+                width: 72px;
+                height: 72px;
             }
 
             .category-slider .slider-item p {
-                font-size: 12px;
+                font-size: 11px;
                 margin-top: 6px;
             }
         }
@@ -732,6 +737,8 @@
 
         /* Category slider items -> chip cards instead of bare image+text */
         .category-slider .slider-item {
+            width: 120px;
+            max-width: 120px;
             text-align: center;
             transition: transform .2s ease;
         }
@@ -761,6 +768,14 @@
             font-weight: 600;
             font-size: 14px;
             color: var(--ink);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: break-word;
+            line-height: 1.3;
         }
 
         .stainless-banner-img {
