@@ -957,9 +957,8 @@ echo get_setting('footer_script'); @endphp
     <script src="{{ static_asset('assets/front_js/bootstrap.js') }}"></script>
     <script src="{{ static_asset('assets/front_js/index.js') }}"></script>
 
-<!-- Popper & Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+<!-- Storefront JS (Swiper Carousels & Interactions) -->
+@vite(['resources/js/storefront.js'])
 
 @yield('script')
 </body>
