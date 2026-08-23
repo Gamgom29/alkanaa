@@ -188,6 +188,7 @@
     <div class="product-box-modern">
         @if ($product->discount > 0)
             <div class="pb-badge">-{{ round($product->discount) }}%</div>
+        @endif
         <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" class="pb-wishlist"
             style="border: none !important; text-decoration: none !important; border-radius: 50%;">
             <i class="fa-regular fa-heart" style="font-size: 15px; color: #e11d48;"></i>
