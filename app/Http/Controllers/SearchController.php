@@ -353,6 +353,8 @@ class SearchController extends Controller
             ->orderBy('order_level', 'desc')
             ->get();
 
+        $products = Product::where($conditions);
+
         if ($category_id != null) {
             $category_ids = CategoryUtility::children_ids($category_id);
             $category_ids[] = $category_id;
