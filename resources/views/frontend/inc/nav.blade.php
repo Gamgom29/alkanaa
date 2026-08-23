@@ -238,90 +238,92 @@
                 <i class="fa-solid fa-bars text-xs"></i>
             </button>
 
-            <!-- Search input with search icon on left -->
+            <!-- Search input with search icon cleanly integrated -->
             <div class="flex-1">
                 <form action="{{ route('search') }}" method="GET" class="m-0">
-                    <div class="relative flex items-center rounded-lg border border-neutral-200 bg-white px-2.5 py-1 shadow-2xs focus-within:border-primary">
-                        <button type="submit" class="p-0.5 text-neutral-400 focus:outline-none">
-                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                        </button>
+                    <div class="flex items-center w-full rounded-lg border border-neutral-300 bg-white px-2.5 py-1 focus-within:border-primary">
                         <input type="text" name="keyword"
                             placeholder="ابحث عن منتج"
-                            class="w-full bg-transparent border-0 px-2 py-0.5 text-xs text-neutral-800 focus:outline-none">
+                            class="w-full bg-transparent text-xs text-neutral-800 focus:outline-none"
+                            style="border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
+                        <button type="submit" class="text-neutral-400 focus:outline-none p-0 ms-1"
+                            style="border: none !important; background: transparent !important;">
+                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </button>
                     </div>
                 </form>
             </div>
 
             <!-- Profile icon -->
             @auth
-                <a href="{{ route('dashboard') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0">
+                <a href="{{ route('dashboard') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0" title="حسابي">
                     <i class="fa-solid fa-user text-xs"></i>
                 </a>
             @else
-                <a href="{{ route('user.login') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0">
+                <a href="{{ route('user.login') }}" class="flex size-8 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-2xs flex-shrink-0" title="تسجيل الدخول">
                     <i class="fa-regular fa-user text-xs"></i>
                 </a>
             @endauth
         </div>
     </div>
 
-    <!-- Offcanvas Menu Drawer -->
-    <div class="offcanvas offcanvas-start" style="padding-bottom: 80px;" tabindex="-1" id="mobileMenu">
-        <div class="offcanvas-header bg-[#0c234a] text-white">
-            <h5 class="offcanvas-title font-bold text-white">{{ get_setting('website_name') ?? 'ALNASSER' }}</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <!-- Offcanvas Menu Drawer (RTL aligned matching Screenshot 2) -->
+    <div class="offcanvas offcanvas-start" dir="rtl" style="padding-bottom: 80px;" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header bg-[#0c234a] text-white flex items-center justify-between p-3.5">
+            <h5 class="offcanvas-title font-bold text-sm text-white m-0">{{ get_setting('website_name') ?? 'Al Qana\'a' }}</h5>
+            <button type="button" class="btn-close btn-close-white m-0 p-1" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
-            <ul class="list-unstyled ps-0">
-                <li class="mb-3">
-                    <a href="{{ route('home') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-home text-primary"></i> {{ translate('Home') }}
+        <div class="offcanvas-body p-3">
+            <ul class="list-unstyled p-0 m-0">
+                <li class="mb-2.5">
+                    <a href="{{ route('home') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-house text-[#4868e6] text-sm"></i> <span>الصفحة الرئيسية</span>
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a href="{{ route('todays-deal') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-percent text-rose-500"></i> منتجات مخفضة
+                <li class="mb-2.5">
+                    <a href="{{ route('todays-deal') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-percent text-rose-500 text-sm"></i> <span>منتجات مخفضة</span>
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a href="{{ route('about.us') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-info-circle text-primary"></i> {{ translate('About') }}
+                <li class="mb-2.5">
+                    <a href="{{ route('about.us') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-circle-info text-[#4868e6] text-sm"></i> <span>عن القناعة</span>
                     </a>
                 </li>
 
                 <!-- Products Accordion -->
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                <li class="mb-2.5">
+                    <a class="text-decoration-none font-bold text-neutral-800 d-flex justify-content-between align-items-center py-1.5 px-2 rounded hover:bg-neutral-100" data-bs-toggle="collapse"
                         href="#productsMenu" role="button" aria-expanded="false" aria-controls="productsMenu">
-                        <span class="d-flex align-items-center gap-2">
-                            <i class="fa-solid fa-table-cells text-primary"></i> {{ translate('All Products') }}
+                        <span class="d-flex align-items-center gap-2.5">
+                            <i class="fa-solid fa-table-cells text-[#4868e6] text-sm"></i> <span>جميع المنتجات</span>
                         </span>
-                        <i class="fa fa-chevron-down text-muted" style="font-size: 12px;"></i>
+                        <i class="fa-solid fa-chevron-down text-neutral-400 text-xs"></i>
                     </a>
 
-                    <div class="collapse mt-2" id="productsMenu">
-                        <ul class="list-unstyled @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') ps-3 @else pe-3 @endif">
+                    <div class="collapse mt-1 pe-3" id="productsMenu">
+                        <ul class="list-unstyled p-0">
                             @foreach ($categories->where('featured', 1) as $category)
-                                <li class="mb-2">
-                                    <a class="text-decoration-none text-dark d-flex align-items-center justify-content-between py-1" data-bs-toggle="collapse"
+                                <li class="mb-1.5">
+                                    <a class="text-decoration-none text-neutral-700 d-flex align-items-center justify-content-between py-1 px-2 rounded hover:bg-neutral-50" data-bs-toggle="collapse"
                                         href="#sub-{{ $category->id }}" role="button" aria-expanded="false"
                                         aria-controls="sub-{{ $category->id }}">
                                         <div class="d-flex align-items-center gap-2">
                                             <img src="{{ uploaded_asset($category->icon) }}"
-                                                style="width: 22px; height: 22px; object-fit: contain;">
-                                            <span class="fw-semibold small">{{ $category->getTranslation('name') }}</span>
+                                                style="width: 20px; height: 20px; object-fit: contain;">
+                                            <span class="font-medium text-xs">{{ $category->getTranslation('name') }}</span>
                                         </div>
                                         @if ($category->childrenCategories && $category->childrenCategories->count())
-                                            <i class="fa fa-chevron-down text-muted" style="font-size: 10px;"></i>
+                                            <i class="fa-solid fa-chevron-down text-neutral-400 text-[10px]"></i>
                                         @endif
                                     </a>
 
                                     @if ($category->childrenCategories && $category->childrenCategories->count())
-                                        <div class="collapse @if (app()->getLocale() == 'en' || app()->getLocale() == 'cn') ps-3 @else pe-3 @endif mt-1" id="sub-{{ $category->id }}">
-                                            <ul class="list-unstyled">
+                                        <div class="collapse pe-3 mt-1" id="sub-{{ $category->id }}">
+                                            <ul class="list-unstyled p-0">
                                                 @foreach ($category->childrenCategories as $sub)
                                                     <li class="mb-1">
-                                                        <a class="text-decoration-none text-muted small d-block py-1"
+                                                        <a class="text-decoration-none text-neutral-500 text-xs d-block py-1"
                                                             href="{{ route('products.category', $sub->slug) }}">
                                                             • {{ $sub->getTranslation('name') }}
                                                         </a>
@@ -336,24 +338,24 @@
                     </div>
                 </li>
 
-                <li class="mb-3">
-                    <a href="{{ route('get-a-quote') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-file-invoice text-muted"></i> {{ translate('get_quote') }}
+                <li class="mb-2.5">
+                    <a href="{{ route('get-a-quote') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-file-lines text-neutral-500 text-sm"></i> <span>عروض الاسعار</span>
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a href="{{ route('service-request') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-tools text-muted"></i> {{ translate('service_request') }}
+                <li class="mb-2.5">
+                    <a href="{{ route('service-request') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-screwdriver-wrench text-neutral-500 text-sm"></i> <span>الخدمات الهندسية</span>
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a href="{{ route('maintainence-request') }}" class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2">
-                        <i class="fa fa-wrench text-muted"></i> {{ translate('maintainence_request') }}
+                <li class="mb-2.5">
+                    <a href="{{ route('maintainence-request') }}" class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100">
+                        <i class="fa-solid fa-wrench text-neutral-500 text-sm"></i> <span>خدمات الصيانة</span>
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a class="text-decoration-none fw-bold text-dark d-flex align-items-center gap-2" href="{{ route('all-our-partners') }}">
-                        <i class="fa fa-handshake text-muted"></i> {{ translate('partners') }}
+                <li class="mb-2.5">
+                    <a class="text-decoration-none font-bold text-neutral-800 d-flex align-items-center gap-2.5 py-1.5 px-2 rounded hover:bg-neutral-100" href="{{ route('all-our-partners') }}">
+                        <i class="fa-solid fa-handshake text-neutral-500 text-sm"></i> <span>شركاء النجاح</span>
                     </a>
                 </li>
             </ul>

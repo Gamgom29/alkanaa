@@ -46,24 +46,50 @@ window.mountMiniCartToastNearCart = function (html) {
 
     $('.mini-cart-toast').remove();
 
-    const $toast = $(html).appendTo('body').css({
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        visibility: 'hidden',
-    });
+    const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'sa' || document.documentElement.lang === 'ar';
+    const isMobile = window.innerWidth < 992;
+
+    const $toast = $(html).appendTo('body');
+
+    if (isMobile) {
+        $toast.css({
+            position: 'fixed',
+            top: '70px',
+            right: isRTL ? '12px' : 'auto',
+            left: isRTL ? 'auto' : '12px',
+            zIndex: 99999,
+            visibility: 'visible',
+            opacity: 1,
+            transform: 'none'
+        }).addClass('show');
+
+        clearTimeout(window.__mctTimer);
+        window.__mctTimer = setTimeout(() => $toast.fadeOut(300, () => $toast.remove()), 3500);
+        return;
+    }
 
     const cartEl = document.getElementById('nav-cart-area');
     if (!cartEl) {
-        $toast.css({ position: 'fixed', visibility: 'visible', top: 80, right: 16 }).addClass('show');
+        $toast.css({
+            position: 'fixed',
+            top: '75px',
+            right: isRTL ? '20px' : 'auto',
+            left: isRTL ? 'auto' : '20px',
+            zIndex: 99999,
+            visibility: 'visible',
+            opacity: 1,
+            transform: 'none'
+        }).addClass('show');
+
+        clearTimeout(window.__mctTimer);
+        window.__mctTimer = setTimeout(() => $toast.fadeOut(300, () => $toast.remove()), 3500);
         return;
     }
 
     const rect = cartEl.getBoundingClientRect();
     const scrollY = window.scrollY || window.pageYOffset;
     const scrollX = window.scrollX || window.pageXOffset;
-    const w = $toast.outerWidth();
-    const isRTL = document.documentElement.dir === 'rtl';
+    const w = $toast.outerWidth() || 340;
 
     const gap = 10;
     const top = rect.bottom + scrollY + gap;
@@ -73,19 +99,18 @@ window.mountMiniCartToastNearCart = function (html) {
     const maxLeft = scrollX + document.documentElement.clientWidth - w - 8;
     left = Math.max(minLeft, Math.min(left, maxLeft));
 
-    $toast.css({ top, left, visibility: 'visible', opacity: 0, transform: 'translateY(-6px)' });
-    requestAnimationFrame(() => $toast.addClass('show').css({ opacity: 1, transform: 'translateY(0)' }));
-
-    const iconCenterX = rect.left + rect.width / 2 + scrollX;
-    let arrowOffset = isRTL ? iconCenterX - left : left + w - iconCenterX;
-    const pad = 18;
-    arrowOffset = Math.max(pad, Math.min(arrowOffset, w - pad));
-    $toast[0].style.setProperty('--arrow-offset', arrowOffset + 'px');
+    $toast.css({
+        position: 'absolute',
+        top: top + 'px',
+        left: left + 'px',
+        zIndex: 99999,
+        visibility: 'visible',
+        opacity: 1,
+        transform: 'none'
+    }).addClass('show');
 
     clearTimeout(window.__mctTimer);
-    window.__mctTimer = setTimeout(() => $toast.find('.mct-close').trigger('click'), 2500);
-
-    window.scrollTo({ top: Math.max(0, top - 120), behavior: 'smooth' });
+    window.__mctTimer = setTimeout(() => $toast.fadeOut(300, () => $toast.remove()), 3500);
 };
 
 document.addEventListener('DOMContentLoaded', function () {

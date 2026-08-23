@@ -9,22 +9,6 @@
 
 @source "../views";
 
-/* Global Font Family Enforcer */
-html,
-body,
-button,
-input,
-select,
-textarea,
-.form-control,
-.btn,
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
-.nav, .navbar, .nav-link, .dropdown-menu, .dropdown-item,
-p, span, a, div, table, th, td, label {
-    font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-}
-
 /* Custom Header Bar Styles */
 .royal-header-top {
     background: linear-gradient(135deg, #0c234a 0%, #1a3c75 40%, #4868e6 100%);
@@ -272,4 +256,131 @@ p, span, a, div, table, th, td, label {
         height: 48px;
         font-size: 26px;
     }
+}
+
+/* Mini Cart Toast Popup Styles */
+.mini-cart-toast {
+    position: fixed;
+    top: 75px;
+    z-index: 99999;
+    width: min(380px, 92vw);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mini-cart-toast.rtl {
+    right: 16px;
+    left: auto;
+}
+
+.mini-cart-toast.ltr {
+    left: 16px;
+    right: auto;
+}
+
+.mini-cart-toast.show {
+    opacity: 1;
+}
+
+.mct-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 800;
+    font-size: 14px;
+    color: #16a34a;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.mct-close {
+    border: 0;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.mct-close:hover {
+    color: #0f172a;
+}
+
+.mct-body {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.mct-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.mct-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #0f172a;
+    margin: 0 0 3px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mct-meta {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.mct-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+}
+
+.mct-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    color: #334155;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+.mct-btn.primary,
+.mct-btn.go-cart-btn {
+    background: #4868e6;
+    border-color: #4868e6;
+    color: #ffffff !important;
+}
+
+.mct-btn.primary:hover,
+.mct-btn.go-cart-btn:hover {
+    background: #3753c8;
+}
+
+.mct-btn:hover {
+    background: #e2e8f0;
 }
