@@ -1,11 +1,11 @@
 <!-- Desktop Header -->
 <header class="d-none d-lg-block">
     <!-- Top Royal Blue Header -->
-    <div class="royal-header-top py-2.5 px-4">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+    <div class="royal-header-top py-3 px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-8">
             <!-- Brand Logo -->
             <div class="flex-shrink-0">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 text-white no-underline">
+                <a href="{{ route('home') }}" class="flex items-center gap-2.5 text-white no-underline">
                     @php $header_logo = get_setting('header_logo'); @endphp
                     @if ($header_logo)
                         <img src="{{ uploaded_asset($header_logo) }}" class="h-10 max-h-10 w-auto object-contain brightness-0 invert" alt="{{ get_setting('website_name') }}">
@@ -20,8 +20,8 @@
                 </a>
             </div>
 
-            <!-- Search Pill -->
-            <div class="flex-1 max-w-xl mx-auto">
+            <!-- Centered Search Pill -->
+            <div class="flex-1 max-w-xl mx-auto flex justify-center">
                 <form action="{{ route('search') }}" method="GET" class="w-full m-0">
                     <div class="header-search-pill">
                         <button type="submit" aria-label="Search">
@@ -78,27 +78,27 @@
 
                 <!-- Language Switcher -->
                 <div class="dropdown relative">
-                    <button class="flex items-center gap-1.5 text-xs font-semibold text-white/95 bg-white/10 hover:bg-white/20 px-2.5 py-1.5 rounded-full transition"
+                    <button class="flex items-center gap-1.5 text-xs font-bold text-white bg-white/15 hover:bg-white/25 px-3 py-2 rounded-full transition"
                         type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>{{ strtoupper(app()->getLocale()) }}</span>
                         @if (app()->getLocale() == 'sa')
-                            <img src="https://flagcdn.com/sa.svg" width="16" height="12" alt="SA" class="rounded-sm">
+                            <img src="https://flagcdn.com/sa.svg" width="16" height="12" alt="SA" class="rounded-xs">
                         @else
-                            <img src="https://flagcdn.com/gb.svg" width="16" height="12" alt="GB" class="rounded-sm">
+                            <img src="https://flagcdn.com/gb.svg" width="16" height="12" alt="GB" class="rounded-xs">
                         @endif
                         <i class="fa-solid fa-chevron-down text-[9px] opacity-75"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-xl border border-neutral-100 p-1.5" aria-labelledby="langDropdown">
                         @foreach (get_all_active_language() as $language)
                             <li>
-                                <a class="dropdown-item flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg text-neutral-700 hover:bg-neutral-100 hover:text-primary"
+                                <a class="dropdown-item flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg text-neutral-700 hover:bg-neutral-100 hover:text-[#4868e6]"
                                     href="{{ url('language/' . $language->code) }}">
                                     @if ($language->code == 'sa')
-                                        <img src="https://flagcdn.com/sa.svg" width="16" alt="SA" class="rounded-sm">
+                                        <img src="https://flagcdn.com/sa.svg" width="16" alt="SA" class="rounded-xs">
                                     @elseif($language->code == 'en')
-                                        <img src="https://flagcdn.com/gb.svg" width="16" alt="EN" class="rounded-sm">
+                                        <img src="https://flagcdn.com/gb.svg" width="16" alt="EN" class="rounded-xs">
                                     @elseif($language->code == 'cn')
-                                        <img src="https://flagcdn.com/cn.svg" width="16" alt="CN" class="rounded-sm">
+                                        <img src="https://flagcdn.com/cn.svg" width="16" alt="CN" class="rounded-xs">
                                     @else
                                         <span class="text-xs">🌐</span>
                                     @endif
@@ -113,31 +113,21 @@
     </div>
 
     <!-- Sub-Navbar (Light Bar) -->
-    <div class="bg-white border-b border-neutral-200/80 py-2.5 px-4 shadow-xs">
+    <div class="bg-white border-b border-neutral-200 py-3 px-6 shadow-xs">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Right Motto (in RTL) -->
-            <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-neutral-800">
-                <img src="https://flagcdn.com/sa.svg" width="20" height="15" alt="SA Flag" class="rounded-xs">
+            <div class="flex items-center gap-2 text-sm font-bold text-neutral-800">
+                <img src="https://flagcdn.com/sa.svg" width="22" height="16" alt="SA Flag" class="rounded-xs">
                 <span class="text-[#0c234a]">الخيار الأول للمطابخ التجارية في السعودية</span>
             </div>
 
             <!-- Left Navigation Links -->
-            <div class="flex items-center gap-5 text-sm font-semibold">
-                <a href="{{ route('todays-deal') }}" class="flex items-center gap-1.5 text-neutral-700 hover:text-[#4868e6] transition no-underline">
-                    <i class="fa-solid fa-percent text-xs text-rose-500"></i>
-                    <span>منتجات مخفضة</span>
-                </a>
-
-                <a href="{{ route('about.us') }}" class="flex items-center gap-1.5 text-neutral-700 hover:text-[#4868e6] transition no-underline">
-                    <i class="fa-regular fa-clock text-xs text-neutral-500"></i>
-                    <span>من نحن</span>
-                </a>
-
+            <div class="flex items-center gap-5 text-sm font-bold">
                 <!-- Products Dropdown Button -->
                 <div class="relative mega-category">
                     <a href="{{ route('search') }}"
                         onmouseover="showMegaMenu()" onmouseout="hideMegaMenu()"
-                        class="inline-flex items-center gap-2 bg-[#4868e6] hover:bg-[#3753c8] text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-xs transition no-underline">
+                        class="inline-flex items-center gap-2 bg-[#4868e6] hover:bg-[#3753c8] text-white text-xs font-bold px-4 py-2 rounded-lg shadow-xs transition no-underline">
                         <i class="fa-solid fa-table-cells"></i>
                         <span>المنتجات</span>
                         <i class="fa-solid fa-chevron-down text-[9px]"></i>
@@ -196,6 +186,16 @@
                         </div>
                     </div>
                 </div>
+
+                <a href="{{ route('todays-deal') }}" class="flex items-center gap-1.5 text-neutral-700 hover:text-[#4868e6] transition no-underline">
+                    <i class="fa-solid fa-percent text-xs text-rose-500"></i>
+                    <span>منتجات مخفضة</span>
+                </a>
+
+                <a href="{{ route('about.us') }}" class="flex items-center gap-1.5 text-neutral-700 hover:text-[#4868e6] transition no-underline">
+                    <i class="fa-regular fa-clock text-xs text-neutral-500"></i>
+                    <span>من نحن</span>
+                </a>
             </div>
         </div>
     </div>
