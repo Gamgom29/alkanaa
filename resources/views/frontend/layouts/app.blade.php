@@ -60,51 +60,26 @@
     <link rel="icon" href="{{ $site_icon }}">
     <link rel="apple-touch-icon" href="{{ $site_icon }}">
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://kit.fontawesome.com/cbcafb1e3c.js" crossorigin="anonymous"></script>
-
-    {{--
-        Legacy theme (AIZ/Bootstrap 4 + a Bootstrap 5 front_css layer) is
-        loaded into a named cascade layer, `legacy`, via @import inside this
-        <style> block — <link> has no `layer` attribute, and these files
-        live only on the server (excluded from the repo by .gitignore), so
-        an in-page @import is the only way to place them in a layer without
-        reading their contents.
-
-        CSS layer priority is decided by the ORDER layer names are first
-        seen across the whole document, not by selector specificity. This
-        block appears before @vite() below, so `legacy` is registered
-        first (lowest priority) and every layer Tailwind registers
-        afterward (theme/utilities) outranks it unconditionally — even
-        against Bootstrap's `!important` utilities like `.bg-primary`.
-        Do not move @vite() above this block.
-
-        Cascade layers need Chrome 99 / Safari 15.4 / Firefox 97 (~iOS
-        15.4+). Older browsers silently drop `@import ... layer()`
-        entirely, which would leave the legacy theme completely unloaded —
-        the inline script below detects that and falls back to plain
-        <link> tags.
-    --}}
-    <!-- Core Stylesheets -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
+    {{-- @if ($rtl == 1)
+        <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
+    @endif --}}
+    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css?v=') }}{{ rand(1000, 9999) }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+    <script src="https://kit.fontawesome.com/cbcafb1e3c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/front_css/index.css') }}">
 
-    {{-- New design system: tokens, IBM Plex Sans Arabic, and (on this
-        legacy shell) Tailwind utilities without Preflight, so the base
-        element reset never fights the styles above. --}}
-    @vite(['resources/css/storefront-compat.css'])
-
+    
     <script>
         var AIZ = AIZ || {};
-        AIZ.routes = {
-            addToCart: '{{ route('cart.addToCart') }}',
-        };
         AIZ.local = {
             nothing_selected: '{!! translate('Nothing selected', null, true) !!}',
             nothing_found: '{!! translate('Nothing found', null, true) !!}',
@@ -986,7 +961,6 @@ echo get_setting('footer_script'); @endphp
 <!-- Popper & Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-@vite(['resources/js/storefront.js'])
 
 @yield('script')
 </body>
