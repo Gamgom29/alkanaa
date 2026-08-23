@@ -180,80 +180,68 @@
                 @endforeach
             </div>
 
-            <!-- Mobile & Tablet Carousel (Exact 2-Column Side-by-Side Mobile Layout) -->
-            <div class="lg:hidden relative px-6">
-                <x-carousel :options="[
-                    'slidesPerView' => 2,
-                    'spaceBetween' => 14,
-                    'breakpoints' => [
-                        '640' => ['slidesPerView' => 3, 'spaceBetween' => 16],
-                        '768' => ['slidesPerView' => 4, 'spaceBetween' => 18],
-                    ],
-                ]">
-                    @foreach ($main_categories as $category)
-                        @php
-                            $catImg = null;
-                            if ($category->icon) {
-                                $catImg = uploaded_asset($category->icon);
-                            } elseif ($category->cover_image) {
-                                $catImg = uploaded_asset($category->cover_image);
-                            } elseif ($category->banner) {
-                                $catImg = uploaded_asset($category->banner);
+            <!-- Mobile & Tablet View: Pure CSS 2-Column Touch Slider (Zero Lag, Perfectly Centered Pedestals) -->
+            <div class="lg:hidden flex gap-3 overflow-x-auto no-scrollbar pb-3 pt-1 px-1 snap-x snap-mandatory">
+                @foreach ($main_categories as $category)
+                    @php
+                        $catImg = null;
+                        if ($category->icon) {
+                            $catImg = uploaded_asset($category->icon);
+                        } elseif ($category->cover_image) {
+                            $catImg = uploaded_asset($category->cover_image);
+                        } elseif ($category->banner) {
+                            $catImg = uploaded_asset($category->banner);
+                        }
+                        if (!$catImg && $category->bannerImage) {
+                            $catImg = my_asset($category->bannerImage->file_name);
+                        }
+                        if (!$catImg) {
+                            $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
+                            if ($firstProd) {
+                                $catImg = uploaded_asset($firstProd->thumbnail_img);
                             }
-                            if (!$catImg && $category->bannerImage) {
-                                $catImg = my_asset($category->bannerImage->file_name);
-                            }
-                            if (!$catImg) {
-                                $firstProd = $category->products()->whereNotNull('thumbnail_img')->first();
-                                if ($firstProd) {
-                                    $catImg = uploaded_asset($firstProd->thumbnail_img);
-                                }
-                            }
+                        }
 
-                            $nameLower = mb_strtolower($category->name);
-                            $defaultIcon = 'fa-solid fa-kitchen-set';
-                            if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
-                                $defaultIcon = 'fa-solid fa-snowflake';
-                            } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
-                                $defaultIcon = 'fa-solid fa-fire-burner';
-                            } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
-                                $defaultIcon = 'fa-solid fa-mug-hot';
-                            } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
-                                $defaultIcon = 'fa-solid fa-wheat-awn';
-                            } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
-                                $defaultIcon = 'fa-solid fa-table';
-                            }
-                        @endphp
+                        $nameLower = mb_strtolower($category->name);
+                        $defaultIcon = 'fa-solid fa-kitchen-set';
+                        if (str_contains($nameLower, 'تبريد') || str_contains($nameLower, 'ثلج') || str_contains($nameLower, 'ثلاج') || str_contains($nameLower, 'مجمد')) {
+                            $defaultIcon = 'fa-solid fa-snowflake';
+                        } elseif (str_contains($nameLower, 'طهي') || str_contains($nameLower, 'أفران') || str_contains($nameLower, 'شوا')) {
+                            $defaultIcon = 'fa-solid fa-fire-burner';
+                        } elseif (str_contains($nameLower, 'مشروب') || str_contains($nameLower, 'قهوة') || str_contains($nameLower, 'عصير')) {
+                            $defaultIcon = 'fa-solid fa-mug-hot';
+                        } elseif (str_contains($nameLower, 'مخبز') || str_contains($nameLower, 'عجان') || str_contains($nameLower, 'حلويات')) {
+                            $defaultIcon = 'fa-solid fa-wheat-awn';
+                        } elseif (str_contains($nameLower, 'ستانلس') || str_contains($nameLower, 'طاول')) {
+                            $defaultIcon = 'fa-solid fa-table';
+                        }
+                    @endphp
 
-                        <div class="swiper-slide">
-                            <a href="{{ route('products.category', $category->slug) }}" class="flex flex-col items-center text-center no-underline group py-1">
-                                <!-- Image Floating over Base -->
-                                <div class="relative w-full flex flex-col items-center justify-end h-28 sm:h-32 mb-2">
-                                    <div class="z-10 flex h-20 sm:h-24 w-full items-center justify-center">
-                                        @if ($catImg)
-                                            <img src="{{ $catImg }}"
-                                                class="max-h-full max-w-[85%] object-contain drop-shadow-md transition duration-300 group-hover:scale-105"
-                                                alt="{{ $category->getTranslation('name') }}"
-                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="hidden size-full items-center justify-center text-white text-2xl">
-                                                <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                            </div>
-                                        @else
-                                            <div class="flex size-full items-center justify-center text-white text-2xl">
-                                                <i class="{{ $defaultIcon }} drop-shadow-md"></i>
-                                            </div>
-                                        @endif
+                    <div class="flex-shrink-0 snap-start" style="width: calc(50% - 6px);">
+                        <a href="{{ route('products.category', $category->slug) }}" class="flex flex-col items-center text-center no-underline group p-1">
+                            <!-- Blue Pedestal with Centered Image/Icon -->
+                            <div class="relative w-full max-w-[130px] aspect-[4/3] rounded-2xl bg-gradient-to-b from-[#5c7ef8] to-[#4868e6] shadow-sm flex items-center justify-center p-3 mx-auto transition duration-200 group-hover:scale-105">
+                                @if ($catImg)
+                                    <img src="{{ $catImg }}"
+                                        class="max-h-full max-w-full object-contain drop-shadow-md transition duration-200 group-hover:scale-110"
+                                        alt="{{ $category->getTranslation('name') }}"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="hidden size-full items-center justify-center text-white text-3xl">
+                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
                                     </div>
-                                    <!-- Blue Pedestal base underneath -->
-                                    <div class="absolute bottom-0 w-full h-12 sm:h-14 rounded-xl bg-gradient-to-t from-[#4868e6] to-[#6d8cf4] shadow-xs"></div>
-                                </div>
-                                <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight mt-1 text-center">
-                                    {{ $category->getTranslation('name') }}
-                                </p>
-                            </a>
-                        </div>
-                    @endforeach
-                </x-carousel>
+                                @else
+                                    <div class="flex size-full items-center justify-center text-white text-3xl">
+                                        <i class="{{ $defaultIcon }} drop-shadow-md"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <!-- Category Title -->
+                            <p class="text-xs sm:text-sm font-bold text-neutral-800 transition group-hover:text-[#4868e6] leading-tight mt-2 text-center line-clamp-2 px-1">
+                                {{ $category->getTranslation('name') }}
+                            </p>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </section>
     @endif

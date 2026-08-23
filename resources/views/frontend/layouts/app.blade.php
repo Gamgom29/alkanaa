@@ -88,41 +88,12 @@
         the inline script below detects that and falls back to plain
         <link> tags.
     --}}
-    <link rel="preload" as="style" href="{{ static_asset('assets/css/vendors.css') }}">
-    <link rel="preload" as="style" href="{{ static_asset('assets/css/aiz-core.css') }}">
-    <link rel="preload" as="style" href="{{ static_asset('assets/css/custom-style.css') }}">
-    <link rel="preload" as="style" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
-    <link rel="preload" as="style" href="{{ static_asset('assets/front_css/index.css') }}">
-    <style>
-        @layer legacy;
-        @import url("{{ static_asset('assets/css/vendors.css') }}") layer(legacy);
-        @import url("{{ static_asset('assets/css/aiz-core.css') }}?v={{ rand(1000, 9999) }}") layer(legacy);
-        @import url("{{ static_asset('assets/css/custom-style.css') }}") layer(legacy);
-        @import url("{{ static_asset('assets/front_css/bootstrap.css') }}") layer(legacy);
-        @import url("{{ static_asset('assets/front_css/index.css') }}") layer(legacy);
-    </style>
-    <script>
-        // Cascade layers unsupported (pre-Chrome 99 / Safari 15.4 / Firefox 97):
-        // the @import ... layer() rules above are silently discarded, so the
-        // legacy theme never loads. Re-add it as plain, unlayered <link> tags.
-        if (!('CSSLayerBlockRule' in window)) {
-            @php
-                $legacyStylesheets = [
-                    static_asset('assets/css/vendors.css'),
-                    static_asset('assets/css/aiz-core.css') . '?v=' . rand(1000, 9999),
-                    static_asset('assets/css/custom-style.css'),
-                    static_asset('assets/front_css/bootstrap.css'),
-                    static_asset('assets/front_css/index.css'),
-                ];
-            @endphp
-            @json($legacyStylesheets).forEach(function (href) {
-                var l = document.createElement('link');
-                l.rel = 'stylesheet';
-                l.href = href;
-                document.head.appendChild(l);
-            });
-        }
-    </script>
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/front_css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/front_css/index.css') }}">
 
     {{-- New design system: tokens, IBM Plex Sans Arabic, and (on this
         legacy shell) Tailwind utilities without Preflight, so the base
