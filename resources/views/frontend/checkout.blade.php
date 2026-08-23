@@ -1,5 +1,105 @@
 @extends('frontend.layouts.app')
 
+@section('style')
+    <style>
+        :root {
+            --checkout-brand: #ae2025;
+        }
+
+        .checkout-card {
+            border: 1px solid #eef0f2 !important;
+            border-radius: 14px !important;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(17, 24, 39, .05);
+            margin-bottom: 1.25rem !important;
+        }
+
+        .checkout-card .card-header {
+            background: #fff;
+            cursor: pointer;
+            transition: background .2s ease;
+        }
+
+        .checkout-card .card-header:hover {
+            background: #fafafa;
+        }
+
+        .checkout-card .card-header svg {
+            flex: 0 0 auto;
+        }
+
+        .checkout-card .card-header .las {
+            transition: transform .2s ease;
+        }
+
+        .checkout-card .card-header[aria-expanded="true"] .las {
+            transform: rotate(180deg);
+        }
+
+        #submitOrderBtn {
+            background-color: var(--checkout-brand);
+            border-color: var(--checkout-brand);
+            border-radius: 999px !important;
+            transition: filter .2s ease, transform .15s ease;
+        }
+
+        #submitOrderBtn:hover:not(:disabled) {
+            filter: brightness(1.08);
+        }
+
+        #submitOrderBtn:active:not(:disabled) {
+            transform: scale(.98);
+        }
+
+        .checkout-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .checkout-actions-row .return-to-shop {
+            order: 2;
+        }
+
+        .checkout-actions-row .complete-order-wrap {
+            order: 1;
+            width: 100%;
+        }
+
+        .checkout-actions-row .complete-order-wrap .btn {
+            width: 100%;
+        }
+
+        @media (min-width: 576px) {
+            .checkout-actions-row .return-to-shop {
+                order: 1;
+            }
+
+            .checkout-actions-row .complete-order-wrap {
+                order: 2;
+                width: auto;
+            }
+
+            .checkout-actions-row .complete-order-wrap .btn {
+                width: auto;
+            }
+        }
+
+        #cart_summary {
+            position: sticky;
+            top: 16px;
+        }
+
+        @media (max-width: 991px) {
+            #cart_summary {
+                position: static;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     <section class="my-4 gry-bg">
         <div class="container">
@@ -12,7 +112,7 @@
                         <div class="accordion" id="accordioncCheckoutInfo">
 
                             <!-- Shipping Info -->
-                            <div class="card rounded-0 border shadow-none" style="margin-bottom: 2rem;">
+                            <div class="card checkout-card border shadow-none">
                                 <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingShippingInfo"
                                     type="button" data-toggle="collapse" data-target="#collapseShippingInfo"
                                     aria-expanded="true" aria-controls="collapseShippingInfo">
@@ -39,7 +139,7 @@
 
                             @if ($service_request)
                                 <!-- Shipping Info -->
-                                <div class="card rounded-0 border shadow-none" style="margin-bottom: 2rem;">
+                                <div class="card checkout-card border shadow-none">
                                     <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingServiceInfo"
                                         type="button" data-toggle="collapse" data-target="#collapseServiceInfo"
                                         aria-expanded="true" aria-controls="collapseServiceInfo">
@@ -79,8 +179,7 @@
                             @endif
 
                             <!-- Delivery Info -->
-                            <div class="card rounded-0 border shadow-none"
-                                style="margin-bottom: 2rem; overflow: visible !important;">
+                            <div class="card checkout-card border shadow-none" style="overflow: visible !important;">
                                 <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingDeliveryInfo"
                                     type="button" data-toggle="collapse" data-target="#collapseDeliveryInfo"
                                     aria-expanded="true" aria-controls="collapseDeliveryInfo">
@@ -109,7 +208,7 @@
 
 
                             <!-- Payment Info -->
-                            <div class="card rounded-0 mb-0 border shadow-none">
+                            <div class="card checkout-card mb-0 border shadow-none">
                                 <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingPaymentInfo"
                                     type="button" data-toggle="collapse" data-target="#collapsePaymentInfo"
                                     aria-expanded="true" aria-controls="collapsePaymentInfo">
@@ -148,18 +247,18 @@
                                                 class="fw-700">{{ translate('privacy policy') }}</a>
                                         </div>
 
-                                        <div class="row align-items-center pt-3 mb-4">
+                                        <div class="checkout-actions-row pt-3 mb-4">
                                             <!-- Return to shop -->
-                                            <div class="col-4">
+                                            <div class="return-to-shop">
                                                 <a href="{{ route('home') }}" class="btn btn-link fs-14 fw-700 px-0">
                                                     <i class="las la-arrow-left fs-16"></i>
                                                     {{ translate('Return to shop') }}
                                                 </a>
                                             </div>
                                             <!-- Complete Ordert -->
-                                            <div class="col-8 ">
+                                            <div class="complete-order-wrap">
                                                 <button type="button" onclick="submitOrder(this)" id="submitOrderBtn"
-                                                    class="btn btn-primary fs-14 fw-700 rounded-0 px-4 submitOrderBtn w-50">{{ translate('Complete Order') }}</button>
+                                                    class="btn btn-primary fs-14 fw-700 px-4 submitOrderBtn">{{ translate('Complete Order') }}</button>
                                             </div>
 
                                         </div>

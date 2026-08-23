@@ -1,3 +1,69 @@
+<style>
+    :root {
+        --nav-brand: #ae2025;
+    }
+
+    .top-bar a:hover {
+        color: var(--nav-brand) !important;
+    }
+
+    .nav-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f6f7f9;
+        color: #1f2430 !important;
+        text-decoration: none !important;
+        transition: all .2s ease;
+        font-size: 16px;
+    }
+
+    .nav-icon-btn:hover {
+        background: var(--nav-brand);
+        color: #fff !important;
+    }
+
+    .nav-search-form .input-group {
+        border-radius: 999px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(17, 24, 39, .06);
+    }
+
+    .nav-search-form .form-control {
+        border: 1px solid #eef0f2;
+        border-left: none;
+        padding-inline-start: 16px;
+    }
+
+    .nav-search-form .form-control:focus {
+        box-shadow: none;
+        border-color: #eef0f2;
+    }
+
+    .nav-search-form button[type="submit"] {
+        background-color: var(--nav-brand) !important;
+        border-radius: 0;
+        padding-inline: 18px;
+        font-weight: 600;
+    }
+
+    header.pc ul li > a {
+        transition: color .2s ease;
+    }
+
+    header.pc ul li > a:hover {
+        color: var(--nav-brand) !important;
+    }
+
+    .logo-header {
+        max-height: 48px;
+        width: auto;
+    }
+</style>
+
 <header class="bg-light border-bottom pc">
     <!-- Top Bar -->
     <div class="top-bar bg-light border-bottom py-1 px-3" style="font-size: 13px;">
@@ -95,26 +161,26 @@
                 </a>
             </div>
             <div class="col-xl-7 col-lg-7 col-md-7 my-auto">
-                <form action="{{ route('search') }}" method="GET">
+                <form action="{{ route('search') }}" method="GET" class="nav-search-form">
                     <div class="input-group">
-                        <button class="btn text-white rounded-0" type="submit" style="background-color: #ae2025;">
+                        <button class="btn text-white" type="submit">
                             <i class="fa-solid fa-magnifying-glass m-1"></i> {{ translate('Search') }}
                         </button>
-                        <input type="text" name="keyword" class="form-control mb-0 rounded-0"
+                        <input type="text" name="keyword" class="form-control mb-0"
                             placeholder="{{ translate('Search...') }}">
                     </div>
                 </form>
             </div>
-            <div class="col-xl-3">
-                <div class="d-flex w-100 align-items-center gap-4">
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <div class="d-flex w-100 align-items-center justify-content-end gap-2">
                     @auth
-                        <a href="{{ route('dashboard') }}" class="text-dark fs-5"><i class="fa fa-user"></i></a>
+                        <a href="{{ route('dashboard') }}" class="nav-icon-btn"><i class="fa fa-user"></i></a>
                     @else
                         <a href="{{ route('user.login') }}"
-                            class="text-dark text-decoration-none small">{{ translate('login') }}</a>
-                        <a href="{{ route('user.login') }}" class="text-dark fs-5"><i class="fa fa-user"></i></a>
+                            class="text-dark text-decoration-none small me-1">{{ translate('login') }}</a>
+                        <a href="{{ route('user.login') }}" class="nav-icon-btn"><i class="fa fa-user"></i></a>
                     @endauth
-                    <a href="{{ route('wishlists.index') }}" class="text-dark fs-5 position-relative">
+                    <a href="{{ route('wishlists.index') }}" class="nav-icon-btn position-relative">
                         <i class="fa fa-heart"></i>
                     </a>
                     @php
@@ -128,7 +194,7 @@
                         }
                     @endphp
 
-                    <a href="javascript:void(0);" class="text-dark fs-5 position-relative" id="nav-cart-area"
+                    <a href="javascript:void(0);" class="nav-icon-btn position-relative" id="nav-cart-area"
                         onclick="openCartOffcanvas()">
                         <i class="fa fa-shopping-cart"></i>
                         <span

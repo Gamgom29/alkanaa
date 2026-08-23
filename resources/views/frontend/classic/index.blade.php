@@ -309,6 +309,63 @@
             gap: 10px;
             padding: 0 30px;
             scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+        }
+
+        /* Self-contained, fully responsive category carousel wrapper
+           (does not depend on the external theme stylesheet's slider-btn rules) */
+        .main-categories .position-relative {
+            padding-inline: 46px;
+        }
+
+        .main-categories .slider-btn.icon-nav-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 3;
+        }
+
+        .main-categories .slider-btn.icon-nav-btn:hover {
+            transform: translateY(-50%) scale(1.06) !important;
+        }
+
+        .main-categories .prev-btn {
+            inset-inline-start: 0;
+        }
+
+        .main-categories .next-btn {
+            inset-inline-end: 0;
+        }
+
+        .category-slider .slider-item {
+            scroll-snap-align: start;
+        }
+
+        @media (max-width: 575px) {
+            .main-categories .position-relative {
+                padding-inline: 38px;
+            }
+
+            .main-categories .slider-btn.icon-nav-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .category-slider {
+                gap: 14px;
+                padding: 0 6px;
+            }
+
+            .category-slider .slider-item img {
+                width: 64px;
+                height: 64px;
+            }
+
+            .category-slider .slider-item p {
+                font-size: 12px;
+                margin-top: 6px;
+            }
         }
 
         .slider-item {
