@@ -305,7 +305,7 @@
                                                 </div>
                                             @endforeach --}}
 
-                                            @foreach (collect($categories)->where('featured', 1) as $category)
+                                            @foreach ($categories->where('featured', 1) as $category)
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="heading-{{ $category->id }}">
                                                         <button
@@ -612,9 +612,9 @@
                         </div>
 
                         <!-- Products -->
-                        <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
-                            @foreach ($products as $key => $product)
-                                <div class="col d-flex">
+                        @foreach ($products->chunk(3) as $chunk)
+                            <div class="d-flex flex-wrap justify-content-between w-100">
+                                @foreach ($chunk as $key => $product)
                                     @if (isset($product_type) && $product_type == 'preorder_product')
                                         @include('preorder.frontend.product_box3', [
                                             'product' => $product,
@@ -627,9 +627,10 @@
                                             ['product' => $product]
                                         )
                                     @endif
-                                </div>
-                            @endforeach
-                        </div>
+                                @endforeach
+
+                            </div>
+                        @endforeach
 
 
                         <div class="d-flex justify-content-center">
