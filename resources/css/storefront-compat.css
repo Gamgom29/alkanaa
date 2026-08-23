@@ -9,6 +9,13 @@
 
 @source "../views";
 
+/* Hide Alpine-controlled elements until Alpine finishes its initial DOM walk,
+   so x-show="false" elements (e.g. the category filter accordion bodies)
+   don't flash visible for a moment on page load before Alpine hides them. */
+[x-cloak] {
+    display: none !important;
+}
+
 /* Custom Header Bar Styles */
 .royal-header-top {
     background: linear-gradient(135deg, #0c234a 0%, #173874 40%, #4868e6 100%);

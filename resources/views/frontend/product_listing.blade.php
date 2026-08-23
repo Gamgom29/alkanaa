@@ -306,21 +306,21 @@
                                             @endforeach --}}
 
                                             @foreach (collect($categories)->where('featured', 1) as $category)
-                                                <div class="accordion-item">
+                                                <div class="accordion-item" x-data="{ open: false }">
                                                     <h2 class="accordion-header" id="heading-{{ $category->id }}">
                                                         <button
-                                                            class="accordion-button @if (app()->getLocale() == 'sa') text-end @endif collapsed"
-                                                            type="button" data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse-{{ $category->id }}"
-                                                            aria-expanded="false"
+                                                            class="accordion-button @if (app()->getLocale() == 'sa') text-end @endif"
+                                                            :class="{ 'collapsed': !open }"
+                                                            type="button" @click="open = !open"
+                                                            :aria-expanded="open.toString()"
                                                             aria-controls="collapse-{{ $category->id }}">
                                                             {{ $category->getTranslation('name') }}
                                                         </button>
                                                     </h2>
                                                     <div id="collapse-{{ $category->id }}"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="heading-{{ $category->id }}"
-                                                        data-bs-parent="#categoryAccordion">
+                                                        x-show="open" x-collapse x-cloak
+                                                        class="accordion-collapse"
+                                                        aria-labelledby="heading-{{ $category->id }}">
                                                         <div
                                                             class="accordion-body @if (app()->getLocale() == 'sa') text-end @endif ">
                                                             <ul class="list-unstyled mb-0">

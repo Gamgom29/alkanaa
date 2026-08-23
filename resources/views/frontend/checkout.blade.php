@@ -13,9 +13,7 @@
 
                             <!-- Shipping Info -->
                             <div class="card rounded-0 border shadow-none" style="margin-bottom: 2rem;">
-                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingShippingInfo"
-                                    type="button" data-toggle="collapse" data-target="#collapseShippingInfo"
-                                    aria-expanded="true" aria-controls="collapseShippingInfo">
+                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingShippingInfo">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 20 20">
@@ -25,10 +23,8 @@
                                         </svg>
                                         <span class="m-2 fs-19 fw-700">{{ translate('Shipping Info') }}</span>
                                     </div>
-                                    <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapseShippingInfo" class="collapse show" aria-labelledby="headingShippingInfo"
-                                    data-parent="#accordioncCheckoutInfo">
+                                <div id="collapseShippingInfo" aria-labelledby="headingShippingInfo">
                                     <div class="card-body" id="shipping_info">
                                         @include('frontend.partials.cart.shipping_info', [
                                             'address_id' => $address_id,
@@ -40,9 +36,7 @@
                             @if ($service_request)
                                 <!-- Shipping Info -->
                                 <div class="card rounded-0 border shadow-none" style="margin-bottom: 2rem;">
-                                    <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingServiceInfo"
-                                        type="button" data-toggle="collapse" data-target="#collapseServiceInfo"
-                                        aria-expanded="true" aria-controls="collapseServiceInfo">
+                                    <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingServiceInfo">
                                         <div class="d-flex align-items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                                 viewBox="0 0 20 20">
@@ -52,11 +46,9 @@
                                             </svg>
                                             <span class="m-2 fs-19 fw-700">{{ translate('Service Info') }}</span>
                                         </div>
-                                        <i class="las la-angle-down fs-18"></i>
                                     </div>
 
-                                    <div id="collapseServiceInfo" class="collapse show" aria-labelledby="headingServiceInfo"
-                                        data-parent="#accordioncCheckoutInfo">
+                                    <div id="collapseServiceInfo" aria-labelledby="headingServiceInfo">
                                         <div class="card-body" id="service_info">
                                             <div class="form-group">
                                                 <label for="file" class="text-danger fw-bold">
@@ -81,9 +73,7 @@
                             <!-- Delivery Info -->
                             <div class="card rounded-0 border shadow-none"
                                 style="margin-bottom: 2rem; overflow: visible !important;">
-                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingDeliveryInfo"
-                                    type="button" data-toggle="collapse" data-target="#collapseDeliveryInfo"
-                                    aria-expanded="true" aria-controls="collapseDeliveryInfo">
+                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingDeliveryInfo">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 20 20">
@@ -93,10 +83,8 @@
                                         </svg>
                                         <span class="m-2 fs-19 fw-700">{{ translate('Delivery Info') }}</span>
                                     </div>
-                                    <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapseDeliveryInfo" class="collapse show" aria-labelledby="headingDeliveryInfo"
-                                    data-parent="#accordioncCheckoutInfo">
+                                <div id="collapseDeliveryInfo" aria-labelledby="headingDeliveryInfo">
                                     <div class="card-body" id="delivery_info">
                                         @include('frontend.partials.cart.delivery_info', [
                                             'carts' => $carts,
@@ -110,9 +98,7 @@
 
                             <!-- Payment Info -->
                             <div class="card rounded-0 mb-0 border shadow-none">
-                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingPaymentInfo"
-                                    type="button" data-toggle="collapse" data-target="#collapsePaymentInfo"
-                                    aria-expanded="true" aria-controls="collapsePaymentInfo">
+                                <div class="card-header border-bottom-0 py-3 py-xl-4" id="headingPaymentInfo">
                                     <div class="d-flex align-items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 20 20">
@@ -122,10 +108,8 @@
                                         </svg>
                                         <span class="m-2 fs-19 fw-700">{{ translate('Payment') }}</span>
                                     </div>
-                                    <i class="las la-angle-down fs-18"></i>
                                 </div>
-                                <div id="collapsePaymentInfo" class="collapse show" aria-labelledby="headingPaymentInfo"
-                                    data-parent="#accordioncCheckoutInfo">
+                                <div id="collapsePaymentInfo" aria-labelledby="headingPaymentInfo">
                                     <div class="card-body" id="payment_info">
                                         @include('frontend.partials.cart.payment_info', [
                                             'carts' => $carts,
