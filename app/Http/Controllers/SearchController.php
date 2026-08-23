@@ -242,17 +242,17 @@ class SearchController extends Controller
             $products = PreorderProduct::where('is_published', 1);
             $products = filter_preorder_product($products);
 
+            $categories = Category::with('childrenCategories', 'coverImage')
+                ->where('level', 0)
+                ->orderBy('order_level', 'desc')
+                ->get();
+
             if ($category_id != null) {
                 $category_ids = CategoryUtility::children_ids($category_id);
                 $category_ids[] = $category_id;
                 $category = Category::with('childrenCategories')->find($category_id);
 
                 $products = $category->preorderProducts();
-            } else {
-                $categories = Category::with('childrenCategories', 'coverImage')
-                    ->where('level', 0)
-                    ->orderBy('order_level', 'desc')
-                    ->get();
             }
 
             if ($request->has('is_available') && $request->is_available !== null) {
@@ -348,7 +348,10 @@ class SearchController extends Controller
             $conditions = array_merge($conditions, ['brand_id' => $brand_id]);
         }
 
-        $products = Product::where($conditions);
+        $categories = Category::with('childrenCategories', 'coverImage')
+            ->where('level', 0)
+            ->orderBy('order_level', 'desc')
+            ->get();
 
         if ($category_id != null) {
             $category_ids = CategoryUtility::children_ids($category_id);
@@ -359,11 +362,6 @@ class SearchController extends Controller
 
             $attribute_ids = AttributeCategory::whereIn('category_id', $category_ids)->pluck('attribute_id')->toArray();
             $attributes = Attribute::whereIn('id', $attribute_ids)->get();
-        } else {
-            $categories = Category::with('childrenCategories', 'coverImage')
-                ->where('level', 0)
-                ->orderBy('order_level', 'desc')
-                ->get();
         }
 
         if ($min_price != null && $max_price != null) {
