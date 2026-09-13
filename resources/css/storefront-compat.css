@@ -964,7 +964,9 @@ body {
     font-size: 11.5px;
     font-weight: 700;
     line-height: 20px;
-    direction: ltr;
+    /* No `direction` here: logical insets resolve against the element's own
+       direction, so an LTR badge would jump onto the wishlist heart in Arabic.
+       The text itself is isolated with <bdi dir="ltr"> in the markup. */
 }
 
 .kn-card-wish {
@@ -1074,7 +1076,6 @@ body {
     color: #8592a6;
     font-size: 11px;
     line-height: 1.4;
-    direction: ltr;
     text-align: start;
     unicode-bidi: plaintext;
     overflow: hidden;

@@ -23,7 +23,7 @@
 
         @if ($hasDiscount)
             <span class="kn-card-discount">
-                -{{ $product->discount_type == 'percent' ? round($product->discount) . '%' : number_format($product->discount, 0) }}
+                <bdi dir="ltr">-{{ $product->discount_type == 'percent' ? round($product->discount) . '%' : number_format($product->discount, 0) }}</bdi>
             </span>
         @endif
 
