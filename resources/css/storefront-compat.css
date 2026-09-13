@@ -679,13 +679,12 @@ body {
     background: var(--kn-steel);
 }
 
-/* Slider artwork is ~3.2:1; keep that ratio so nothing is cropped. */
+/* Slider artwork is uploaded at 1500×340 with the headline near an edge:
+   show it at its natural ratio so no words are cropped on phones. */
 .kn-hero-img {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 32 / 10;
-    object-fit: cover;
 }
 
 .kn-hero .swiper-pagination {
@@ -1379,15 +1378,23 @@ a.kn-tile:hover img {
 /* Footer                                                             */
 /* ------------------------------------------------------------------ */
 .site-footer {
-    margin-top: 28px;
-    padding: 28px 0 16px;
+    margin-top: 44px;
+    padding: 0 0 16px;
     background: var(--kn-navy);
     color: #c3cde0;
     font-size: 0.875rem;
 }
 
 @media (min-width: 992px) {
-    .site-footer { margin-top: 40px; padding-top: 48px; }
+    .site-footer { margin-top: 56px; }
+}
+
+.site-footer > .kn-wrap {
+    padding-top: 24px;
+}
+
+@media (min-width: 992px) {
+    .site-footer > .kn-wrap { padding-top: 36px; }
 }
 
 .site-footer a {
@@ -1415,13 +1422,7 @@ a.kn-tile:hover img {
     }
 }
 
-.kn-foot-logo img {
-    height: 40px;
-    width: auto;
-    max-width: 180px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-}
+
 
 .kn-foot-logo span {
     color: #fff;
@@ -1702,6 +1703,112 @@ a.kn-tile:hover img {
     outline: 2px solid var(--kn-yellow);
     outline-offset: 2px;
     border-radius: 6px;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Brand motif: the three blue and three red wave lines from the logo  */
+/* ------------------------------------------------------------------ */
+:root {
+    --kn-waves: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='36' viewBox='0 0 240 36'%3E%3Cg fill='none' stroke-width='3' stroke-linecap='round'%3E%3Cpath stroke='%232f6fd0' d='M0 5c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3Cpath stroke='%232f6fd0' d='M0 11c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3Cpath stroke='%232f6fd0' d='M0 17c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3Cpath stroke='%23d0343a' d='M0 23c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3Cpath stroke='%23d0343a' d='M0 29c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3Cpath stroke='%23d0343a' d='M0 35c20 0 40-4 60-4s40 4 60 4 40-4 60-4 40 4 60 4'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.kn-waves {
+    height: 36px;
+    margin-top: -18px;
+    background: var(--kn-waves) repeat-x center / 240px 36px;
+}
+
+/* Header wordmark (phones) and logo lockup (desktop) */
+.kn-wordmark {
+    flex: 1;
+    min-width: 0;
+    color: #fff !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    text-decoration: none !important;
+    white-space: nowrap;
+}
+
+.kn-logo-lockup {
+    gap: 10px;
+}
+
+.kn-logo-lockup img {
+    height: 52px;
+    width: 52px;
+    max-width: none;
+}
+
+.kn-logo-lockup .kn-logo-text {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Footer brand: the full-colour logo on a white tile */
+.kn-foot-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.kn-foot-mark {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    padding: 6px;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.kn-foot-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Keep the real blue/red colours: the white-logo filter is for the blue header only. */
+    filter: none !important;
+}
+
+@media (min-width: 992px) {
+    .kn-foot-mark { width: 112px; height: 112px; }
+}
+
+.kn-foot-name {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.kn-foot-name strong {
+    color: #fff;
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.kn-foot-name small {
+    color: #93a1bb;
+    font-size: 0.8125rem;
+}
+
+/* The 60-years tile carries the waves along its top edge */
+.kn-tile-feature::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 1;
+    height: 36px;
+    background: var(--kn-waves) repeat-x center / 240px 36px;
+    opacity: .9;
+    pointer-events: none;
 }
 
 /* Floating WhatsApp */

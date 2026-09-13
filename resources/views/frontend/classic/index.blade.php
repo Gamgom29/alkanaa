@@ -84,7 +84,10 @@
         {{-- 1. Hero slider --}}
         <section class="kn-wrap kn-hero" aria-label="{{ $t('العروض الرئيسية', 'Featured promotions') }}">
             <x-carousel :pagination="true" :arrows="false" :options="[
-                'loop' => true,
+                // rewind instead of loop: Swiper's loop mode re-orders cloned slides and
+                // mis-translates them in RTL, leaving the active banner shifted off-screen.
+                'rewind' => true,
+                'spaceBetween' => 0,
                 'autoplay' => ['delay' => 5000, 'disableOnInteraction' => false],
                 'speed' => 600,
             ]">

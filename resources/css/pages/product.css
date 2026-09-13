@@ -1056,3 +1056,12 @@ html[dir="rtl"] .kn-pd-crumb-sep {
         text-overflow: ellipsis;
     }
 }
+
+/* Product page, phones: the page has its own WhatsApp quote button and a sticky
+   add-to-cart bar, so the floating WhatsApp bubble only covers the title. */
+@media (max-width: 991px) {
+    body:has(.kn-pd-bar) .whatsapp-float,
+    body:has(.kn-pd-bar) .whatsapp-float-en {
+        display: none !important;
+    }
+}

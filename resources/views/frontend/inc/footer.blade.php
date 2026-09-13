@@ -73,16 +73,20 @@
 @endphp
 
 <footer class="site-footer {{ $fIsAr ? 'rtl' : 'ltr' }}">
+    <div class="kn-waves" aria-hidden="true"></div>
     <div class="kn-wrap">
         {{-- Brand + direct contact: the first thing a buyer of big equipment needs --}}
         <div class="kn-foot-top">
             <div class="kn-foot-brand">
                 <a href="{{ route('home') }}" class="kn-foot-logo" aria-label="{{ $siteName }}">
                     @if ($footerLogo)
-                        <img src="{{ uploaded_asset($footerLogo) }}" alt="{{ $siteName }}" loading="lazy">
-                    @else
-                        <span>{{ $siteName }}</span>
+                        {{-- Full-colour mark on a white tile: the blue and red waves are the brand. --}}
+                        <span class="kn-foot-mark"><img src="{{ uploaded_asset($footerLogo) }}" alt="" loading="lazy"></span>
                     @endif
+                    <span class="kn-foot-name">
+                        <strong>{{ $ft('القناعة', 'AlKanaa', 'AlKanaa') }}</strong>
+                        <small>{{ $ft('مصانع القناعة المحدودة', "Al Qana'a Factories Co. Ltd.", "Al Qana'a Factories Co. Ltd.") }}</small>
+                    </span>
                 </a>
                 <p class="kn-foot-about">
                     {{ $ft('القناعة مصنع سعودي لمعدات المطابخ التجارية والمطاعم والمقاهي، بخبرة تمتد لأكثر من 60 عامًا.', 'AlKanaa is a Saudi manufacturer of commercial kitchen, restaurant and café equipment with more than 60 years of experience.', 'AlKanaa 是沙特商用厨房、餐厅和咖啡馆设备制造商，拥有 60 多年经验。') }}

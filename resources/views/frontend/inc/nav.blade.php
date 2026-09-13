@@ -21,12 +21,11 @@
 <header class="kn-header d-none d-lg-block">
     <div class="kn-header-bar">
         <div class="kn-wrap">
-            <a href="{{ route('home') }}" class="kn-logo" aria-label="{{ $siteName }}">
+            <a href="{{ route('home') }}" class="kn-logo kn-logo-lockup" aria-label="{{ $siteName }}">
                 @if ($header_logo)
-                    <img src="{{ uploaded_asset($header_logo) }}" alt="{{ $siteName }}">
-                @else
-                    <span class="kn-logo-text">{{ $siteName }}</span>
+                    <img src="{{ uploaded_asset($header_logo) }}" alt="">
                 @endif
+                <span class="kn-logo-text">{{ $nt('القناعة', 'AlKanaa') }}</span>
             </a>
 
             <div class="kn-search" role="search">
@@ -201,12 +200,10 @@
             <i class="fa-solid fa-bars" aria-hidden="true"></i>
         </button>
 
-        <a href="{{ route('home') }}" class="kn-logo" aria-label="{{ $siteName }}">
-            @if ($header_logo)
-                <img src="{{ uploaded_asset($header_logo) }}" alt="{{ $siteName }}">
-            @else
-                <span class="kn-logo-text">{{ $siteName }}</span>
-            @endif
+        {{-- The logo is a square mark whose lettering is unreadable at header size,
+            so phones get the brand name set as a wordmark instead. --}}
+        <a href="{{ route('home') }}" class="kn-wordmark" aria-label="{{ $siteName }}">
+            {{ $nt('القناعة', 'AlKanaa') }}
         </a>
 
         @auth
