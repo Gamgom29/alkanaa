@@ -79,6 +79,9 @@
     
     <script>
         var AIZ = AIZ || {};
+        AIZ.routes = AIZ.routes || {
+            addToCart: '{{ route('cart.addToCart') }}',
+        };
         AIZ.local = {
             nothing_selected: '{!! translate('Nothing selected', null, true) !!}',
             nothing_found: '{!! translate('Nothing found', null, true) !!}',
@@ -100,6 +103,7 @@
             complete: '{{ translate('Complete') }}',
             file: '{{ translate('File') }}',
             files: '{{ translate('Files') }}',
+            add_to_cart_failed: {!! json_encode(in_array(app()->getLocale(), ['sa', 'ar', 'eg']) ? 'تعذرت إضافة المنتج إلى السلة، حاول مرة أخرى.' : 'Could not add the product to the cart. Please try again.', JSON_UNESCAPED_UNICODE) !!},
         }
     </script>
 

@@ -9,82 +9,61 @@
         : $product->unit_price;
     $inStock = $product->current_stock > 0;
     $sku = $product->stocks->first()->sku ?? '';
+    $isAr = in_array(app()->getLocale(), ['sa', 'ar', 'eg']);
+    $name = $product->getTranslation('name');
+    $url = route('product', $product->slug);
 @endphp
 
-<div class="group relative flex h-full flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-3 sm:p-4 text-start shadow-2xs transition duration-250 hover:-translate-y-1 hover:shadow-md">
-    <!-- Top Badges & Wishlist -->
-    <div class="flex items-center justify-between mb-1">
+<article class="kn-card">
+    <div class="kn-card-media">
+        <a href="{{ $url }}" class="kn-plinth" tabindex="-1" aria-hidden="true">
+            <img src="{{ uploaded_asset($product->thumbnail_img) }}" alt="" loading="lazy"
+                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+        </a>
+
         @if ($hasDiscount)
-            <span class="rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[11px] font-extrabold text-rose-600">
-                -{{ round($product->discount) }}%
+            <span class="kn-card-discount">
+                -{{ $product->discount_type == 'percent' ? round($product->discount) . '%' : number_format($product->discount, 0) }}
             </span>
-        @else
-            <span></span>
         @endif
 
-        <button type="button" onclick="addToWishList({{ $product->id }})"
-            aria-label="{{ translate('Add to wishlist') }}"
-            class="wishlist-heart-btn flex size-8 items-center justify-center rounded-full bg-neutral-50 text-neutral-400 transition hover:bg-rose-50 hover:text-rose-500 border-0 outline-none"
-            style="border: none !important; outline: none !important; background: #f8fafc;">
-            <i class="fa-regular fa-heart text-sm"></i>
+        <button type="button" class="kn-card-wish" onclick="addToWishList({{ $product->id }})"
+            aria-label="{{ translate('Add to wishlist') }}">
+            <i class="fa-regular fa-heart" aria-hidden="true"></i>
         </button>
     </div>
 
-    <!-- Product Image -->
-    <a href="{{ route('product', $product->slug) }}" class="my-1 flex h-36 sm:h-44 w-full items-center justify-center overflow-hidden p-2">
-        <img src="{{ uploaded_asset($product->thumbnail_img) }}" alt="{{ $product->getTranslation('name') }}"
-            class="max-h-full max-w-full object-contain transition duration-300 group-hover:scale-105"
-            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
-    </a>
+    <div class="kn-card-body">
+        <div class="kn-card-meta">
+            <span class="kn-stock {{ $inStock ? '' : 'is-out' }}">
+                {{ $inStock ? ($isAr ? 'متوفر' : translate('Available')) : ($isAr ? 'نفد من المخزون' : translate('Out of stock')) }}
+            </span>
+            <span class="kn-ship">{{ $isAr ? 'شحن مجاني' : translate('Free Shipping') }}</span>
+        </div>
 
-    <!-- Badges Row -->
-    <div class="mt-2 flex flex-wrap items-center gap-1.5">
-        <span class="rounded-md bg-[#fef08a] px-1.5 py-0.5 text-[10px] font-bold text-[#854d0e]">
-            {{ translate('Free Shipping') ?? 'شحن مجاني' }}
-        </span>
-        <span class="rounded-md {{ $inStock ? 'bg-[#dcfce7] text-[#166534]' : 'bg-red-50 text-red-700 border border-red-200' }} px-1.5 py-0.5 text-[10px] font-bold">
-            {{ $inStock ? '✔ ' . translate('Available') : translate('Out of stock') }}
-        </span>
+        <a href="{{ $url }}" class="kn-card-title">{{ $name }}</a>
+
         @if ($sku)
-            <span class="text-[10px] text-neutral-400 font-mono">
-                {{ $sku }}
-            </span>
+            <p class="kn-sku">{{ $sku }}</p>
         @endif
-    </div>
 
-    <!-- Product Title -->
-    <a href="{{ route('product', $product->slug) }}" class="mt-2 block no-underline">
-        <h3 class="line-clamp-2 min-h-[2.5rem] text-xs sm:text-sm font-bold text-neutral-900 transition group-hover:text-[#4868e6] leading-snug">
-            {{ $product->getTranslation('name') }}
-        </h3>
-    </a>
-
-    <!-- Price and Add to Cart Button -->
-    <div class="mt-3 flex items-end justify-between gap-2 pt-2 border-t border-neutral-100">
-        <!-- Add to cart button (Royal Blue) -->
-        <button type="button" @if (!$inStock) disabled @endif data-id="{{ $product->id }}"
-            title="{{ translate('Add to Cart') }}"
-            class="add-to-cart-btn flex size-9 sm:size-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#4868e6] text-white shadow-xs transition hover:bg-[#3753c8] active:scale-95 disabled:cursor-not-allowed disabled:bg-neutral-300"
-            style="border: none !important; outline: none !important;">
-            <i class="fa-solid fa-cart-shopping text-xs sm:text-sm"></i>
-        </button>
-
-        <!-- Price Area -->
-        <div class="text-end">
-            <div class="flex items-baseline justify-end gap-1.5">
-                @if ($hasDiscount)
-                    <span class="text-[11px] text-neutral-400 line-through">
-                        {{ number_format($product->unit_price, 0) }}
-                    </span>
-                @endif
-                <span class="text-sm sm:text-base font-extrabold text-[#0c234a]">
+        <div class="kn-card-foot">
+            <div class="kn-price">
+                <span class="kn-price-now">
                     {{ number_format($newPrice, 0) }}
-                    <span class="text-xs font-bold text-neutral-600">ر.س</span>
+                    <small>{{ $isAr ? 'ر.س' : 'SAR' }}</small>
                 </span>
+                @if ($hasDiscount)
+                    <span class="kn-price-was">{{ number_format($product->unit_price, 0) }}</span>
+                @endif
             </div>
-            <div class="text-[10px] text-neutral-400 font-medium leading-none mt-0.5">
-                {{ translate('inclusive_of_vat') }}
-            </div>
+            <p class="kn-vat">{{ translate('inclusive_of_vat') }}</p>
+
+            <button type="button" class="kn-btn kn-btn-primary add-to-cart-btn" data-id="{{ $product->id }}"
+                @if (!$inStock) disabled @endif>
+                <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+                <span>{{ $inStock ? ($isAr ? 'أضف للسلة' : translate('Add to Cart')) : ($isAr ? 'غير متوفر' : translate('Out of stock')) }}</span>
+            </button>
         </div>
     </div>
-</div>
+</article>

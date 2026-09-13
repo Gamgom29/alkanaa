@@ -121,6 +121,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const $ = window.jQuery;
     if (!$) return;
 
+    // Password show/hide. Pages that include auth/login_register_js bind their
+    // own click handler directly on the icon; leave those alone.
+    $(document).on('click keydown', '.password-toggle', function (e) {
+        if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+        const direct = $._data(this, 'events');
+        if (e.type === 'click' && direct && direct.click) return;
+        e.preventDefault();
+
+        const $icon = $(this);
+        const $input = $icon.siblings('input').first();
+        const show = $input.attr('type') === 'password';
+        $input.attr('type', show ? 'text' : 'password');
+        $icon.toggleClass('la-eye', !show).toggleClass('la-eye-slash', show);
+        $icon.attr('aria-pressed', show ? 'true' : 'false');
+    });
+
     $(document).on('click', '.add-to-cart-btn', function (e) {
         e.preventDefault();
         const $btn = $(this);
@@ -159,10 +175,11 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             error: function () {
                 if (window.AIZ && window.AIZ.plugins && window.AIZ.plugins.notify) {
-                    AIZ.plugins.notify('danger', 'Error adding to cart');
+                    AIZ.plugins.notify('danger', (AIZ.local && AIZ.local.add_to_cart_failed) || 'Error adding to cart');
                 }
             },
             complete: function () {
+                // Buttons that were disabled never reach the request, so re-enable.
                 $btn.prop('disabled', false).html(originalHtml);
             },
         });
